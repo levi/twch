@@ -1,71 +1,67 @@
 package twch
 
-import (
-  "fmt"
-)
-
 type Streams struct {
   client *Client
 }
 
 type streamSummary struct {
-  Viewers  int         `json:"viewers"`
-  Channels int         `json:"channels"`
-  Links    interface{} `json:"_links"`
+  Viewers  int         `json:"viewers,omitempty"`
+  Channels int         `json:"channels,omitempty"`
+  Links    interface{} `json:"_links,omitempty"`
 }
 
 type streamChannel struct {
-  Links  interface{} `json:"_links"`
-  Stream Stream      `json:"stream"`
+  Links  interface{} `json:"_links,omitempty"`
+  Stream Stream      `json:"stream,omitempty"`
 }
 
 type streamList struct {
-  Total   int         `json:"_total"`
-  Streams []Stream    `json:"stream"`
-  Links   interface{} `json:"_links"`
+  Total   int         `json:"_total,omitempty"`
+  Streams []Stream    `json:"stream,omitempty"`
+  Links   interface{} `json:"_links,omitempty"`
 }
 
 type streamFeatured struct {
-  Featured []Stream    `json:"featured"`
-  Links    interface{} `json:"_links"`
+  Featured []Stream    `json:"featured,omitempty"`
+  Links    interface{} `json:"_links,omitempty"`
 }
 
 type streamFollowed struct {
-  Links   interface{} `json:"_links"`
-  Total   int         `json:"_total"`
-  Streams []Stream    `json:"streams"`
+  Links   interface{} `json:"_links,omitempty"`
+  Total   int         `json:"_total,omitempty"`
+  Streams []Stream    `json:"streams,omitempty"`
 }
 
 type Stream struct {
-  Id        int         `json:"_id"`
-  CreatedAt string      `json:"created_at"`
-  Preview   Asset       `json:"preview"`
-  Channel   interface{} `json:"channel"`
-  Game      string      `json:"game"`
+  Id        int         `json:"_id,omitempty"`
+  CreatedAt string      `json:"created_at,omitempty"`
+  Preview   Asset       `json:"preview,omitempty"`
+  Channel   interface{} `json:"channel,omitempty"`
+  Game      string      `json:"game,omitempty"`
 }
 
 type RequestOptions struct {
-  limit  int
-  offset int
-  hls    bool
+  Limit  int  `url:"limit,omitempty"`
+  Offset int  `url:"offset,omitempty"`
+  HLS    bool `url:"hls,omitempty"`
 }
 
-type StreamsRequestOptions struct {
+type StreamOptions struct {
   RequestOptions
-  game       string
-  channel    string
-  embeddable bool
-  client_id  string
+  Game       string `url:"game:omitempty"`
+  Channel    string `url:"channel,omitempty"`
+  Embeddable bool   `url:"embeddable,omitempty"`
+  ClientId   string `url:"client_id,omitempty"`
 }
 
 func (s *Streams) Channel(channel string) (stream Stream, err error) {
-  uri := fmt.Sprintf("streams/%s", channel)
-  req, err := s.client.NewRequest("GET", uri)
-  if err != nil {
-    return nil, err
-  }
+  // uri := fmt.Sprintf("streams/%s", channel)
+  // req, err := s.client.NewRequest("GET", uri)
+  // if err != nil {
+  //   return
+  // }
 
-  r := new()
+  return
 }
 
 func (s *Streams) Summary() (viewers, channels int, err error) {

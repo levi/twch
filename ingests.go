@@ -17,6 +17,6 @@ type listIngest struct {
   Links   interface{} `json:"_links"`
 }
 
-func (i *Ingests) ListIngests() ([]Ingest, err) {
+func (i *Ingests) ListIngests() ([]Ingest, error) {
   return nil, nil
 }

@@ -47,37 +47,37 @@ type CommericalOptions struct {
   Length string `url:"length,omitempty"`
 }
 
-func (c *Channels) GetChannel(channel string) (Channel, err) {
+func (c *Channels) GetChannel(channel string) (Channel, error) {
   // "channels/:channel"
-  return nil, nil
+  return Channel{}, nil
 }
 
-func (c *Channels) GetUserChannel() (Channel, err) {
+func (c *Channels) GetUserChannel() (Channel, error) {
   // "channel"
-  return nil, nil
+  return Channel{}, nil
 }
 
-func (c *Channels) GetEditors(channel string) ([]Editors, err) {
+func (c *Channels) GetEditors(channel string) ([]User, error) {
   // "channels/:channel/editors"
   return nil, nil
 }
 
-func (c *Channels) GetTeams(channel string) ([]Team, err) {
+func (c *Channels) GetTeams(channel string) ([]Team, error) {
   // "channels/:channel/teams"
   return nil, nil
 }
 
-func (c *Channels) UpdateChannel(channel string) err {
+func (c *Channels) UpdateChannel(channel string) error {
   // PUT "channels/:channel"
   return nil
 }
 
-func (c *Channels) ResetStreamKey(channel string) err {
+func (c *Channels) ResetStreamKey(channel string) error {
   // DELETE "channels/:channel/stream_key"
   return nil
 }
 
-func (c *Channels) StartCommercial(channel string) err {
+func (c *Channels) StartCommercial(channel string) error {
   // POST "channels/:channel/commerical"
   return nil
 }

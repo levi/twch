@@ -37,17 +37,17 @@ type SearchGameOptions struct {
 	SearchOptions
 }
 
-func (s *Searches) Channels(q string, otps *SearchOptions) ([]Channel, err) {
+func (s *Search) Channels(q string, opts *SearchOptions) ([]Channel, error) {
 	opts.Query = q
 	return nil, nil
 }
 
-func (s *Searches) Streams(q string, opts *SearchStreamOptions) ([]Stream, err) {
+func (s *Search) Streams(q string, opts *SearchStreamOptions) ([]Stream, error) {
 	opts.Query = q
 	return nil, nil
 }
 
-func (s *Searches) Games(q string, opts *SearchGameOptions) ([]Game, err) {
+func (s *Search) Games(q string, opts *SearchGameOptions) ([]Game, error) {
 	opts.Query = q
 	return nil, nil
 }

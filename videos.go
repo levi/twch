@@ -5,7 +5,7 @@ type Videos struct {
 }
 
 type videosResponse struct {
-  Videos []video     `json:"videos"`
+  Videos []Video     `json:"videos"`
   Links  interface{} `json:"_links"`
 }
 
@@ -38,17 +38,17 @@ type VideoChannelOptions struct {
   broadcasts bool
 }
 
-func (v *Videos) Video(id int) (Video, err) {
+func (v *Videos) Video(id int) (Video, error) {
   // "videos/:id"
-  return nil, nil
+  return Video{}, nil
 }
 
-func (v *Videos) Top() ([]Video, err) {
+func (v *Videos) Top() ([]Video, error) {
   // "videos/top"
   return nil, nil
 }
 
-func (v *Videos) ChannelVideos(channel string) ([]Video, err) {
+func (v *Videos) ChannelVideos(channel string) ([]Video, error) {
   // "channels/:channel/videos"
   return nil, nil
 }

@@ -19,10 +19,10 @@ type User struct {
   Staff       bool        `json:"staff,omitempty"`
 }
 
-func (u *Users) CurrentUser() (User, err) {
-  return nil, nil
+func (u *Users) CurrentUser() (User, error) {
+  return User{}, nil
 }
 
-func (u *Users) User(username string) (User, err) {
-  return nil, nil
+func (u *Users) User(username string) (User, error) {
+  return User{}, nil
 }

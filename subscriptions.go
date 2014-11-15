@@ -23,17 +23,17 @@ type SubscriptionOptions struct {
   Direction string `url:"direction,omitempty"`
 }
 
-func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *SubscriptionOptions) ([]Subscription, err) {
+func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *SubscriptionOptions) ([]Subscription, error) {
   // "channels/:channel/subscriptions"
   return nil, nil
 }
 
-func (s *Subscriptions) UserSubscribed(user, channel string) (Subscription, err) {
+func (s *Subscriptions) UserSubscribed(user, channel string) (Subscription, error) {
   // "channels/:channel/subscriptions/:user"
-  return nil, nil
+  return Subscription{}, nil
 }
 
-func (s *Subscriptions) ChannelSubscribed(user, channel string) (Subscription, err) {
+func (s *Subscriptions) ChannelSubscribed(user, channel string) (Subscription, error) {
   // "users/:user/subscriptions/:channel"
-  return nil, nil
+  return Subscription{}, nil
 }

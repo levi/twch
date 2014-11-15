@@ -14,27 +14,27 @@ type FollowOptions struct {
   RequestOptions
 }
 
-func (f *Follows) GetChannelFollows(channel string) ([]Follow, err) {
+func (f *Follows) GetChannelFollows(channel string) ([]Follow, error) {
   // "channels/:channel/follows"
   return nil, nil
 }
 
-func (f *Follows) GetFollowedChannels(user string) ([]Channel, err) {
+func (f *Follows) GetFollowedChannels(user string) ([]Channel, error) {
   // "users/:user/follows/channels"
   return nil, nil
 }
 
-func (f *Follows) IsFollowing(user, channel string) (Channel, err) {
+func (f *Follows) IsFollowing(user, channel string) (Channel, error) {
   // "users/:user/follows/channels/:target"
-  return nil, nil
+  return Channel{}, nil
 }
 
-func (f *Follows) FollowChannel(user, channel string) (Channel, err) {
+func (f *Follows) FollowChannel(user, channel string) (Channel, error) {
   // PUT "users/:user/follows/channels/:target"
-  return nil, nil
+  return Channel{}, nil
 }
 
-func (f *Follows) UnfollowChannel(user, channel string) err {
+func (f *Follows) UnfollowChannel(user, channel string) error {
   // DELETE "users/:user/follows/channels/:target"
-  return nil, nil
+  return nil
 }

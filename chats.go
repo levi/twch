@@ -21,7 +21,7 @@ type Emoticon struct {
   Images []EmoticonImage `json:"images"`
 }
 
-func (c *Chats) GetEmoticons() ([]Emoticon, err) {
+func (c *Chats) GetEmoticons() ([]Emoticon, error) {
   // "chat/emoticons"
   return nil, nil
 }

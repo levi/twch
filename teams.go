@@ -16,12 +16,12 @@ type Team struct {
   Background  string `json:"background"`
 }
 
-func (t *Teams) ListTeams() ([]Team, err) {
+func (t *Teams) ListTeams() ([]Team, error) {
   // "teams"
   return nil, nil
 }
 
-func (t *Teams) GetTeam(team string) (Team, err) {
+func (t *Teams) GetTeam(team string) (Team, error) {
   // "teams/:team"
-  return nil, nil
+  return Team{}, nil
 }

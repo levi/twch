@@ -15,17 +15,17 @@ type Block struct {
   User      User   `json:"user"`
 }
 
-func (b *Blocks) ListBlocks(login string) ([]Block, err) {
+func (b *Blocks) ListBlocks(login string) ([]Block, error) {
   // "users/:login/blocks"
   return nil, nil
 }
 
-func (b *Blocks) BlockUser(target, current string) (Block, err) {
+func (b *Blocks) BlockUser(target, current string) (Block, error) {
   // PUT "users/:user/blocks/:target"
-  return nil
+  return Block{}, nil
 }
 
-func (b *Blocks) UnblockUser(target, current string) err {
+func (b *Blocks) UnblockUser(target, current string) error {
   // DELETE "users/:users/blocks/:target"
   return nil
 }
