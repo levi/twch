@@ -5,36 +5,24 @@ type Channels struct {
 }
 
 type Channel struct {
-  Id        int    `json:"_id,omitempty"`
-  Name      string `json:"name,omitempty"`
-  Game      string `json:"game,omitempty"`
-  CreatedAt string `json:"created_at,omitempty"`
-  Delay     int    `json:"delay,omitempty"`
-  StreamKey string `json:"stream_key,omitempty"`
-  Teams     []struct {
-    Id          int         `json:"_id,omitempty"`
-    Name        string      `json:"name,omitempty"`
-    CreatedAt   string      `json:"created_at,omitempty"`
-    UpdatedAt   string      `json:"updated_at,omitempty"`
-    Background  string      `json:"background,omitempty"`
-    Banner      string      `json:"banner,omitempty"`
-    Logo        string      `json:"logo,omitempty"`
-    Info        string      `json:"info,omitempty"`
-    DisplayName string      `json:"display_name,omitempty"`
-    Links       interface{} `json:"_links,omitempty"`
-  } `json:"teams,omitempty"`
-  Status      string      `json:"status,omitempty"`
-  UpdatedAt   string      `json:"updated_at,omitempty"`
-  Banner      string      `json:"banner,omitempty"`
-  VideoBanner string      `json:"video_banner,omitempty"`
-  Background  string      `json:"background,omitempty"`
-  Logo        string      `json:"logo,omitempty"`
-  Url         string      `json:"url,omitempty"`
-  Login       string      `json:"login,omitempty"`
-  DisplayName string      `json:"display_name,omitempty"`
-  Email       string      `json:"email,omitempty"`
-  Mature      bool        `json:"mature,omitempty"`
-  Links       interface{} `json:"_links,omitempty"`
+  ID          *int    `json:"_id,omitempty"`
+  DisplayName *string `json:"display_name,omitempty"`
+  Name        *string `json:"name,omitempty"`
+  Game        *string `json:"game,omitempty"`
+  Delay       *int    `json:"delay,omitempty"`
+  StreamKey   *string `json:"stream_key,omitempty"`
+  Teams       []Team  `json:"teams,omitempty"`
+  Status      *string `json:"status,omitempty"`
+  Banner      *string `json:"banner,omitempty"`
+  VideoBanner *string `json:"video_banner,omitempty"`
+  Background  *string `json:"background,omitempty"`
+  Logo        *string `json:"logo,omitempty"`
+  URL         *string `json:"url,omitempty"`
+  Login       *string `json:"login,omitempty"`
+  Email       *string `json:"email,omitempty"`
+  Mature      *bool   `json:"mature,omitempty"`
+  CreatedAt   *string `json:"created_at,omitempty"`
+  UpdatedAt   *string `json:"updated_at,omitempty"`
 }
 
 type ChannelOptions struct {
