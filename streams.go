@@ -14,7 +14,7 @@ type streamChannel struct {
 }
 
 type streamList struct {
-	Streams []Stream    `json:"stream,omitempty"`
+	Streams []Stream    `json:"streams,omitempty"`
 	*listLinks
 	*listTotal
 }
@@ -87,7 +87,8 @@ func (s *Streams) ListStreams(opts *StreamOptions) (streams []Stream, resp *Resp
 	return
 }
 
-// GetChannel fetches the current stream of a given channel. If the channel is offline, a zeroed Stream is returned without error.
+// GetChannel fetches the current stream of a given channel.
+// If the channel is offline, a zeroed Stream is returned without error.
 func (s *Streams) GetChannel(channel string) (stream *Stream, resp *Response, err error) {
 	uri := fmt.Sprintf("streams/%s", channel)
 	req, err := s.client.NewRequest("GET", uri)

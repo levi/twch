@@ -58,6 +58,24 @@ func assetPtr() *Asset {
 	}
 }
 
+func channelPtr() *Channel {
+	return &Channel{
+		ID:          intPtr(1),
+		DisplayName: stringPtr("d"),
+		Name:        stringPtr("n"),
+		Game:        stringPtr("g"),
+		Delay:       intPtr(0),
+		Status:      stringPtr("s"),
+		Teams:       make([]Team, 0),
+		Banner:      stringPtr("b"),
+		Background:  stringPtr("b"),
+		Logo:        stringPtr("l"),
+		URL:         stringPtr("u"),
+		CreatedAt:   stringPtr("2011-12-23T18:03:44Z"),
+		UpdatedAt:   stringPtr("2013-02-15T15:22:24Z"),
+	}
+}
+
 func TestListTotal(t *testing.T) {
 	l := listTotal{Total: intPtr(1)}
 	if v := l.ListTotal(); *v != 1 {
