@@ -112,14 +112,12 @@ func TestListLinks_empty(t *testing.T) {
 	}
 }
 
+type testResponseData struct {
+	*listLinks
+	*listTotal
+}
+
 func TestNewResponse(t *testing.T) {
-	links := &listLinks{
-		Links: listPagingLinks{
-			Next: "https://api.twitch.tv/kraken/streams?channel=zisss%2Cvoyboy&game=Diablo+III&limit=100&offset=300",
-			Prev: "https://api.twitch.tv/kraken/streams?channel=zisss%2Cvoyboy&game=Diablo+III&limit=100&offset=100",
-		},
-	}
-	total := &listTotal{Total: intPtr(1)}
 	resp := new(http.Response)
 	want := &Response{
 		Response:   resp,
@@ -128,7 +126,16 @@ func TestNewResponse(t *testing.T) {
 		Total:      intPtr(1),
 	}
 
-	got, err := newResponse(resp, links, total)
+	got, err := newResponse(resp, testResponseData{
+		listLinks: &listLinks{
+			Links: listPagingLinks{
+				Next: "https://api.twitch.tv/kraken/streams?limit=100&offset=300",
+				Prev: "https://api.twitch.tv/kraken/streams?limit=100&offset=100",
+			},
+		},
+		listTotal: &listTotal{Total: intPtr(1)},
+	})
+
 	if err != nil {
 		t.Errorf("newResponse returned with an error: %+v", err)
 	}

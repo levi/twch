@@ -15,8 +15,8 @@ type streamChannel struct {
 
 type streamList struct {
 	Streams []Stream    `json:"stream,omitempty"`
-	listLinks
-	listTotal
+	*listLinks
+	*listTotal
 }
 
 type streamFeatured struct {

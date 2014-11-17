@@ -110,8 +110,7 @@ func (c *Client) Do(req *http.Request, v interface{}) (r *Response, err error) {
 		return nil, err
 	}
 
-	// TODO: Include next/prev and total meta data
-	r, err = newResponse(resp, nil, nil)
+	r, err = newResponse(resp, v)
 	if err != nil {
 		return
 	}
@@ -128,10 +127,17 @@ type listPageOptions interface {
 	PrevOffset() (*int, error)
 }
 
+// listTotal represents the total count attribute returned by some
+// list API responses. Since not all list responses include a 'total'
+// JSON attribute, it's necessary to separate this into a different
+// struct for optionality
 type listTotal struct {
 	Total *int `json:"_total"`
 }
 
+// ListTotal satisfies the listTotalOptions interface by conditionally
+// responding with the underlying struct's total count. A nil pointer
+// is returned if the struct lacks a total value.
 func (l *listTotal) ListTotal() *int {
 	return l.Total
 }
@@ -213,29 +219,42 @@ type Response struct {
 	*http.Response
 }
 
-// newResponse constructs a new response with included paging meta data.
-// Metadata is completely optional in the construction of the Response and passing
-// nil pointers will keep the final fields nil.
-func newResponse(resp *http.Response, p listPageOptions, t listTotalOptions) (r *Response, err error) {
+// newResponse constructs a new response wrapper, conditionally adding list metadata
+func newResponse(resp *http.Response, v interface{}) (r *Response, err error) {
 	r = &Response{Response: resp}
 
-	if p != nil {
-		r.NextOffset, err = p.NextOffset()
-		if err != nil {
-			return
-		}
-
-		r.PrevOffset, err = p.PrevOffset()
+	if l, ok := v.(listPageOptions); ok {
+		err = r.SetOffsets(l)
 		if err != nil {
 			return
 		}
 	}
 
-	if t != nil {
-		r.Total = t.ListTotal()
+	if t, ok := v.(listTotalOptions); ok {
+		r.SetTotal(t)
 	}
 
 	return r, nil
+}
+
+// SetOffsets adds the paging metadata to the response
+func (r *Response) SetOffsets(p listPageOptions) (err error) {
+	r.NextOffset, err = p.NextOffset()
+	if err != nil {
+		return err
+	}
+
+	r.PrevOffset, err = p.PrevOffset()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SetTotal adds the total list count to the response
+func (r *Response) SetTotal(t listTotalOptions) {
+	r.Total = t.ListTotal()
 }
 
 // intPtr converts an int value into an allocated pointer to an int

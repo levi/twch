@@ -115,12 +115,12 @@ func TestStreamListStreams(t *testing.T) {
 
 	fmt.Printf("Streams.ListStreams: %+v\n", resp)
 
-	if resp.Total != intPtr(1) {
-		t.Errorf("Streams.ListStreams Total did not return correct value: %+v\n", resp.Total)
+	if *resp.Total != 1 {
+		t.Errorf("Streams.ListStreams Total did not return correct value: %+v\n", *resp.Total)
 	}
 
-	if resp.NextOffset != intPtr(100) {
-		t.Errorf("Streams.ListStreams NextOffset did not return correct value: %+v\n", resp.NextOffset)
+	if *resp.NextOffset != 100 {
+		t.Errorf("Streams.ListStreams NextOffset did not return correct value: %+v\n", *resp.NextOffset)
 	}
 
 	if resp.PrevOffset != nil {
