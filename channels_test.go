@@ -113,3 +113,32 @@ func TestListChannelEditors(t *testing.T) {
 		t.Errorf("Channels.ListChannelEditors response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestListChannelTeams(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/channels/test_user1/teams", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{  "_links": {    "self": "s"  },  "teams": [    {      "_links": {        "self": "s"      },      "_id": 1,      "name": "n",      "info": "i",      "display_name": "d",      "created_at": "2011-10-25T23:55:47Z",      "updated_at": "2013-05-24T00:17:12Z",      "logo": "l",      "banner": "b",      "background": null    }  ]}`)
+	})
+	want := []Team{
+		Team{
+			ID:          intPtr(1),
+			Info:        stringPtr("i"),
+			DisplayName: stringPtr("d"),
+			Name:        stringPtr("n"),
+			Logo:        stringPtr("l"),
+			Banner:      stringPtr("b"),
+			CreatedAt:   stringPtr("2011-10-25T23:55:47Z"),
+			UpdatedAt:   stringPtr("2013-05-24T00:17:12Z"),
+		},
+	}
+	got, _, err := client.Channels.ListChannelTeams("test_user1")
+	if err != nil {
+		t.Errorf("Channels.ListChannelTeams: request returned error %+v", err)
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Channels.ListChannelTeams response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}

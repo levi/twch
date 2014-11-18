@@ -12,6 +12,10 @@ type editorsResponse struct {
 	Users []User `json:"users,omitempty"`
 }
 
+type teamsResponse struct {
+	Teams []Team `json:"teams,omitempty"`
+}
+
 type Channel struct {
 	ID          *int    `json:"_id,omitempty"`
 	DisplayName *string `json:"display_name,omitempty"`
@@ -99,9 +103,23 @@ func (c *Channels) ListChannelEditors(channel string) (u []User, resp *Response,
 	return
 }
 
-func (c *Channels) GetTeams(channel string) ([]Team, error) {
-	// "channels/:channel/teams"
-	return nil, nil
+// ListChannelTeams returns a list of teams for the given channel
+func (c *Channels) ListChannelTeams(channel string) (t []Team, resp *Response, err error) {
+	url := fmt.Sprintf("channels/%s/teams", channel)
+	req, err := c.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	e := new(teamsResponse)
+	resp, err = c.client.Do(req, e)
+	if err != nil {
+		return
+	}
+
+	t = e.Teams
+
+	return
 }
 
 func (c *Channels) UpdateChannel(channel string) error {
