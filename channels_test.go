@@ -142,3 +142,18 @@ func TestListChannelTeams(t *testing.T) {
 		t.Errorf("Channels.ListChannelTeams response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestResetStreamKey(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/channels/channel/stream_key", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	err := client.Channels.ResetStreamKey("stream_key")
+	if err != nil {
+		t.Errorf("Channels.ResetStreamKey: returned error %+v", err)
+	}
+}

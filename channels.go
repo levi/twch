@@ -127,9 +127,21 @@ func (c *Channels) UpdateChannel(channel string) error {
 	return nil
 }
 
-func (c *Channels) ResetStreamKey(channel string) error {
-	// DELETE "channels/:channel/stream_key"
-	return nil
+// ResetStreamKey reset's an authenticated channel's stream key
+// Requires the `channel_stream` authentication scope
+func (c *Channels) ResetStreamKey(channel string) (err error) {
+	url := fmt.Sprintf("channels/%s/stream_key", channel)
+	req, err := c.client.NewRequest("DELETE", url)
+	if err != nil {
+		return
+	}
+
+	_, err = c.client.Do(req, nil)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func (c *Channels) StartCommercial(channel string) error {
