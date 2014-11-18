@@ -38,3 +38,51 @@ func TestGetChannel(t *testing.T) {
 		t.Errorf("Channels.GetChannel response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestGetUserChannel(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/channel", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{  "game": "g",  "name": "n",  "stream_key": "s",  "created_at": "2011-03-19T15:42:22Z",  "delay": 0,  "status": "s",  "updated_at": "2012-03-14T03:30:41Z",  "teams": [{    "name": "n",    "created_at": "2011-10-25T23:55:47Z",    "updated_at": "2011-11-14T19:48:21Z",    "background": null,    "banner": "b",    "logo": null,    "_links": {      "self": "s"    },    "_id": 10,    "info": "i",    "display_name": "d"  }],  "_links": {    "self": "s",    "chat":"c",    "videos": "v",    "video_status": "v",    "commercial":"c"  },  "banner": "b",  "video_banner": "v",  "background": "b",  "logo": "l",  "_id": 1,  "mature": false,  "login": "l",  "url": "u",  "email": "e"}`)
+	})
+	want := &Channel{
+		// Title:       stringPtr("t"),
+		// DisplayName: stringPtr("d"),
+		Name:        stringPtr("n"),
+		Game:        stringPtr("g"),
+		StreamKey:   stringPtr("s"),
+		Status:      stringPtr("s"),
+		Delay:       intPtr(0),
+		Banner:      stringPtr("b"),
+		VideoBanner: stringPtr("v"),
+		Background:  stringPtr("b"),
+		Logo:        stringPtr("l"),
+		ID:          intPtr(1),
+		Mature:      boolPtr(false),
+		URL:         stringPtr("u"),
+		Email:       stringPtr("e"),
+		Login:       stringPtr("l"),
+		Teams: []Team{
+			Team{
+				Name:        stringPtr("n"),
+				Banner:      stringPtr("b"),
+				ID:          intPtr(10),
+				Info:        stringPtr("i"),
+				DisplayName: stringPtr("d"),
+				CreatedAt:   stringPtr("2011-10-25T23:55:47Z"),
+				UpdatedAt:   stringPtr("2011-11-14T19:48:21Z"),
+			},
+		},
+		CreatedAt: stringPtr("2011-03-19T15:42:22Z"),
+		UpdatedAt: stringPtr("2012-03-14T03:30:41Z"),
+	}
+	got, _, err := client.Channels.GetUserChannel()
+	if err != nil {
+		t.Errorf("Channels.GetUserChannel: request returned error %+v", err)
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Channels.GetUserChannel response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}

@@ -57,9 +57,21 @@ func (c *Channels) GetChannel(channel string) (ch *Channel, resp *Response, err 
 	return
 }
 
-func (c *Channels) GetUserChannel() (Channel, error) {
-	// "channel"
-	return Channel{}, nil
+// GetUserChannel returns the channel for the authenticated user
+// Requires the `channel_read` authentication scope to be approved
+func (c *Channels) GetUserChannel() (ch *Channel, resp *Response, err error) {
+	req, err := c.client.NewRequest("GET", "channel")
+	if err != nil {
+		return
+	}
+
+	ch = new(Channel)
+	resp, err = c.client.Do(req, ch)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func (c *Channels) GetEditors(channel string) ([]User, error) {
