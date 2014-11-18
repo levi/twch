@@ -5,23 +5,36 @@ type Chats struct {
 }
 
 type listEmoticons struct {
-	Emoticons []Emoticon  `json:"emoticons"`
-	Links     interface{} `json:"_links"`
+	Emoticons []Emoticon  `json:"emoticons,omitempty"`
+	Links     interface{} `json:"_links,omitempty"`
 }
 
 type EmoticonImage struct {
-	EmoticonSet int `json:"emoticon_set"`
-	Height      int `json:"height"`
-	Width       int `json:"width"`
-	Url         int `json:"url"`
+	EmoticonSet *int    `json:"emoticon_set,omitempty"`
+	Height      *int    `json:"height,omitempty"`
+	Width       *int    `json:"width,omitempty"`
+	URL         *string `json:"url,omitempty"`
 }
 
 type Emoticon struct {
-	Regex  string          `json:"regex"`
+	Regex  *string         `json:"regex"`
 	Images []EmoticonImage `json:"images"`
 }
 
-func (c *Chats) GetEmoticons() ([]Emoticon, error) {
-	// "chat/emoticons"
-	return nil, nil
+// ListEmoticons returns a list of all the emoticons on Twitch
+func (c *Chats) ListEmoticons() (e []Emoticon, resp *Response, err error) {
+	req, err := c.client.NewRequest("GET", "chat/emoticons")
+	if err != nil {
+		return
+	}
+
+	r := new(listEmoticons)
+	resp, err = c.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	e = r.Emoticons
+
+	return
 }
