@@ -14,9 +14,9 @@ type listBlocks struct {
 }
 
 type Block struct {
-	ID        int    `json:"_id"`
-	UpdatedAt string `json:"updated_at"`
-	User      User   `json:"user"`
+	ID        *int    `json:"_id"`
+	UpdatedAt *string `json:"updated_at"`
+	User      *User   `json:"user"`
 }
 
 func (b *Blocks) ListBlocks(login string, opts *ListOptions) (blocks []Block, resp *Response, err error) {

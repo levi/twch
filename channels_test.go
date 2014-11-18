@@ -86,3 +86,30 @@ func TestGetUserChannel(t *testing.T) {
 		t.Errorf("Channels.GetUserChannel response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestListChannelEditors(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/channels/test_user1/editors", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{  "_links": {    "self": "s"  },  "users": [    {      "_links": {        "self": "s"      },      "created_at": "2013-02-06T21:21:57Z",      "name": "n",      "updated_at": "2013-02-13T20:59:42Z",      "_id": 1,      "display_name": "d",      "logo": null,      "staff": false    }  ]}`)
+	})
+	want := []User{
+		User{
+			ID:          intPtr(1),
+			DisplayName: stringPtr("d"),
+			Name:        stringPtr("n"),
+			Staff:       boolPtr(false),
+			CreatedAt:   stringPtr("2013-02-06T21:21:57Z"),
+			UpdatedAt:   stringPtr("2013-02-13T20:59:42Z"),
+		},
+	}
+	got, _, err := client.Channels.ListChannelEditors("test_user1")
+	if err != nil {
+		t.Errorf("Channels.ListChannelEditors: request returned error %+v", err)
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Channels.ListChannelEditors response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}

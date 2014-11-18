@@ -8,6 +8,10 @@ type Channels struct {
 	client *Client
 }
 
+type editorsResponse struct {
+	Users []User `json:"users,omitempty"`
+}
+
 type Channel struct {
 	ID          *int    `json:"_id,omitempty"`
 	DisplayName *string `json:"display_name,omitempty"`
@@ -74,9 +78,25 @@ func (c *Channels) GetUserChannel() (ch *Channel, resp *Response, err error) {
 	return
 }
 
-func (c *Channels) GetEditors(channel string) ([]User, error) {
-	// "channels/:channel/editors"
-	return nil, nil
+// ListChannelEditors returns a list of user objects associated with the channel
+// as "editor" status.
+// This method requires the `channel_read` authentication scope
+func (c *Channels) ListChannelEditors(channel string) (u []User, resp *Response, err error) {
+	url := fmt.Sprintf("channels/%s/editors", channel)
+	req, err := c.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	e := new(editorsResponse)
+	resp, err = c.client.Do(req, e)
+	if err != nil {
+		return
+	}
+
+	u = e.Users
+
+	return
 }
 
 func (c *Channels) GetTeams(channel string) ([]Team, error) {

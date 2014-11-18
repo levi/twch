@@ -18,16 +18,16 @@ func TestListBlocks(t *testing.T) {
 
 	want := []Block{
 		Block{
-			ID:        1,
-			UpdatedAt: "2013-02-07T01:04:43Z",
-			User: User{
-				ID:          1,
-				DisplayName: "d",
-				Name:        "n",
-				Logo:        "l",
+			ID:        intPtr(1),
+			UpdatedAt: stringPtr("2013-02-07T01:04:43Z"),
+			User: &User{
+				ID:          intPtr(1),
+				DisplayName: stringPtr("d"),
+				Name:        stringPtr("n"),
+				Logo:        stringPtr("l"),
 				Staff:       boolPtr(false),
-				CreatedAt:   "2010-06-30T08:26:49Z",
-				UpdatedAt:   "2013-02-06T22:44:19Z",
+				CreatedAt:   stringPtr("2010-06-30T08:26:49Z"),
+				UpdatedAt:   stringPtr("2013-02-06T22:44:19Z"),
 			},
 		},
 	}
@@ -55,16 +55,16 @@ func TestAddBlock(t *testing.T) {
 	})
 
 	want := &Block{
-		ID:        1,
-		UpdatedAt: "2013-02-07T01:04:43Z",
-		User: User{
-			ID:          1,
-			DisplayName: "d",
-			Name:        "n",
-			Logo:        "l",
+		ID:        intPtr(1),
+		UpdatedAt: stringPtr("2013-02-07T01:04:43Z"),
+		User: &User{
+			ID:          intPtr(1),
+			DisplayName: stringPtr("d"),
+			Name:        stringPtr("n"),
+			Logo:        stringPtr("l"),
 			Staff:       boolPtr(false),
-			CreatedAt:   "2011-05-01T14:50:12Z",
-			UpdatedAt:   "2013-01-18T22:33:55Z",
+			CreatedAt:   stringPtr("2011-05-01T14:50:12Z"),
+			UpdatedAt:   stringPtr("2013-01-18T22:33:55Z"),
 		},
 	}
 
