@@ -70,10 +70,25 @@ func TestAddBlock(t *testing.T) {
 
 	got, _, err := client.Blocks.AddBlock("test_user1", "test_user2")
 	if err != nil {
-		t.Errorf("Blocks.AddBlock: returned error", err)
+		t.Errorf("Blocks.AddBlock: returned error %+v", err)
 	}
 
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("Block.AddBlocks: result did not match expecation\nwant: %+v\n got: %+v", want, got)
+	}
+}
+
+func TestRemoveBlock(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/users/test_user1/blocks/test_user2", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	err := client.Blocks.RemoveBlock("test_user1", "test_user2")
+	if err != nil {
+		t.Errorf("Blocks.RemoveBlock: returned error %+v", err)
 	}
 }

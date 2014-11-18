@@ -58,7 +58,20 @@ func (b *Blocks) AddBlock(user, target string) (block *Block, resp *Response, er
 	return
 }
 
-func (b *Blocks) UnblockUser(target, current string) error {
-	// DELETE "users/:users/blocks/:target"
-	return nil
+// RemoveBlock deletes a block from the passed authenticated user. `user` is the current user,
+// `target` is the account to block. A 404 error will be returned if the block did not exist
+// for the given user.
+func (b *Blocks) RemoveBlock(user, target string) (err error) {
+	url := fmt.Sprintf("users/%s/blocks/%s", user, target)
+	req, err := b.client.NewRequest("DELETE", url)
+	if err != nil {
+		return
+	}
+
+	_, err = b.client.Do(req, nil)
+	if err != nil {
+		return
+	}
+
+	return
 }

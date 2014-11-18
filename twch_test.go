@@ -46,9 +46,6 @@ func testMethod(t *testing.T, r *http.Request, method string) {
 	}
 }
 
-func testResponse(t *testing.T, r *Response) {
-}
-
 func testListResponse(t *testing.T, r *Response, total *int, next *int, prev *int) {
 	if total != nil {
 		if r.Total == nil {

@@ -105,17 +105,19 @@ func (c *Client) Do(req *http.Request, v interface{}) (r *Response, err error) {
 	}
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(v)
-	if err != nil {
-		return nil, err
+	if v != nil {
+		err = json.NewDecoder(resp.Body).Decode(v)
+		if err != nil {
+			return nil, err
+		}
+
+		r, err = newResponse(resp, v)
+		if err != nil {
+			return
+		}
 	}
 
-	r, err = newResponse(resp, v)
-	if err != nil {
-		return
-	}
-
-	return r, nil
+	return
 }
 
 type listTotalOptions interface {
