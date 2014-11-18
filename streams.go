@@ -14,20 +14,26 @@ type streamChannel struct {
 }
 
 type streamList struct {
-	Streams []Stream    `json:"streams,omitempty"`
+	Streams []Stream `json:"streams,omitempty"`
 	*listLinks
 	*listTotal
 }
 
-type streamFeatured struct {
-	Featured []Stream    `json:"featured,omitempty"`
-	Links    interface{} `json:"_links,omitempty"`
+type featuredResponse struct {
+	Featured []FeaturedStream `json:"featured,omitempty"`
+	*listLinks
 }
 
 type streamFollowed struct {
 	Links   interface{} `json:"_links,omitempty"`
 	Total   int         `json:"_total,omitempty"`
 	Streams []Stream    `json:"streams,omitempty"`
+}
+
+type FeaturedStream struct {
+	Image  *string `json:"image,omitempty"`
+	Text   *string `json:"text,omitempty"`
+	Stream *Stream `json:"stream,omitempty"`
 }
 
 type StreamSummary struct {
@@ -84,6 +90,27 @@ func (s *Streams) ListStreams(opts *StreamOptions) (streams []Stream, resp *Resp
 		return
 	}
 	streams = r.Streams
+	return
+}
+
+// ListFeaturedStreams returns the streams featured on the front page of twitch
+func (s *Streams) ListFeaturedStreams(opts *RequestOptions) (f []FeaturedStream, resp *Response, err error) {
+	u, err := appendOptions("streams/featured", opts)
+	if err != nil {
+		return
+	}
+
+	req, err := s.client.NewRequest("GET", u)
+	if err != nil {
+		return
+	}
+
+	r := new(featuredResponse)
+	resp, err = s.client.Do(req, r)
+	if err != nil {
+		return
+	}
+	f = r.Featured
 	return
 }
 

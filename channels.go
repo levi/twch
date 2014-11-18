@@ -17,25 +17,32 @@ type teamsResponse struct {
 }
 
 type Channel struct {
-	ID          *int    `json:"_id,omitempty"`
-	DisplayName *string `json:"display_name,omitempty"`
-	Name        *string `json:"name,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Game        *string `json:"game,omitempty"`
-	Delay       *int    `json:"delay,omitempty"`
-	StreamKey   *string `json:"stream_key,omitempty"`
-	Teams       []Team  `json:"teams,omitempty"`
-	Status      *string `json:"status,omitempty"`
-	Banner      *string `json:"banner,omitempty"`
-	VideoBanner *string `json:"video_banner,omitempty"`
-	Background  *string `json:"background,omitempty"`
-	Logo        *string `json:"logo,omitempty"`
-	URL         *string `json:"url,omitempty"`
-	Login       *string `json:"login,omitempty"`
-	Email       *string `json:"email,omitempty"`
-	Mature      *bool   `json:"mature,omitempty"`
-	CreatedAt   *string `json:"created_at,omitempty"`
-	UpdatedAt   *string `json:"updated_at,omitempty"`
+	ID                           *int    `json:"_id,omitempty"`
+	DisplayName                  *string `json:"display_name,omitempty"`
+	Name                         *string `json:"name,omitempty"`
+	Title                        *string `json:"title,omitempty"`
+	Game                         *string `json:"game,omitempty"`
+	Delay                        *int    `json:"delay,omitempty"`
+	StreamKey                    *string `json:"stream_key,omitempty"`
+	Teams                        []Team  `json:"teams,omitempty"`
+	Status                       *string `json:"status,omitempty"`
+	Banner                       *string `json:"banner,omitempty"`
+	ProfileBanner                *string `json:"profile_banner,omitempty"`
+	ProfileBannerBackgroundColor *string `json:"profile_banner_background_color,omitempty"`
+	VideoBanner                  *string `json:"video_banner,omitempty"`
+	Background                   *string `json:"background,omitempty"`
+	Logo                         *string `json:"logo,omitempty"`
+	URL                          *string `json:"url,omitempty"`
+	Login                        *string `json:"login,omitempty"`
+	Email                        *string `json:"email,omitempty"`
+	Mature                       *bool   `json:"mature,omitempty"`
+	Language                     *string `json:"language,omitempty"`
+	BroadcasterLanguage          *string `json:"broadcaster_language,omitempty"`
+	Partner                      *bool   `json:"partner,omitempty"`
+	Views                        *int    `json:"views,omitempty"`
+	Followers                    *int    `json:"followers,omitempty"`
+	CreatedAt                    *string `json:"created_at,omitempty"`
+	UpdatedAt                    *string `json:"updated_at,omitempty"`
 }
 
 type ChannelOptions struct {

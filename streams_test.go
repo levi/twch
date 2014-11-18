@@ -104,3 +104,64 @@ func TestStreamListStreams(t *testing.T) {
 		t.Errorf("Streams.ListStreams response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestStreamListFeaturedStreams(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/streams/featured", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testParams(t, r, params{
+			"limit":  "1",
+			"offset": "1",
+			"hls":    "true",
+		})
+		fmt.Fprint(w, `{  "_links": {     "self": "https://api.twitch.tv/kraken/streams/featured?limit=25&offset=0",     "next": "https://api.twitch.tv/kraken/streams/featured?limit=25&offset=25"  },  "featured": [    {      "image": "i",      "text": "t",      "stream": {        "_id":1,        "game":"g",        "viewers":1,        "created_at":"2014-11-18T16:36:57Z",        "preview":{          "small":"s","medium":"m","large":"l","template":"t"        },        "channel":{          "mature":true,          "status":"s",          "broadcaster_language":"en",          "display_name":"d",          "game":"g",          "delay":0,          "language":"en-us",          "_id":1,          "name":"n",          "created_at":"2008-04-27T11:40:03Z",          "updated_at":"2014-11-18T17:02:30Z",          "logo":"l","banner":"b",          "video_banner":"b",          "background":null,"profile_banner":"p",          "profile_banner_background_color":"p",          "partner":true,          "url":"u",          "views":1,          "followers":1        }      }    }  ]}`)
+	})
+
+	want := []FeaturedStream{
+		FeaturedStream{
+			Image: stringPtr("i"),
+			Text:  stringPtr("t"),
+			Stream: &Stream{
+				ID:        intPtr(1),
+				Game:      stringPtr("g"),
+				Viewers:   intPtr(1),
+				CreatedAt: stringPtr("2014-11-18T16:36:57Z"),
+				Preview:   assetPtr(),
+				Channel: &Channel{
+					ID:                           intPtr(1),
+					DisplayName:                  stringPtr("d"),
+					Name:                         stringPtr("n"),
+					Game:                         stringPtr("g"),
+					BroadcasterLanguage:          stringPtr("en"),
+					Language:                     stringPtr("en-us"),
+					Delay:                        intPtr(0),
+					Status:                       stringPtr("s"),
+					Banner:                       stringPtr("b"),
+					VideoBanner:                  stringPtr("b"),
+					ProfileBanner:                stringPtr("p"),
+					ProfileBannerBackgroundColor: stringPtr("p"),
+					Mature:    boolPtr(true),
+					Partner:   boolPtr(true),
+					Views:     intPtr(1),
+					Followers: intPtr(1),
+					Logo:      stringPtr("l"),
+					URL:       stringPtr("u"),
+					CreatedAt: stringPtr("2008-04-27T11:40:03Z"),
+					UpdatedAt: stringPtr("2014-11-18T17:02:30Z"),
+				},
+			},
+		},
+	}
+
+	opts := &RequestOptions{ListOptions: ListOptions{Limit: 1, Offset: 1}, HLS: true}
+	got, resp, err := client.Streams.ListFeaturedStreams(opts)
+	if err != nil {
+		t.Errorf("Streams.ListFeaturedStreams returned error: %v", err)
+	}
+	testListResponse(t, resp, nil, intPtr(25), nil)
+
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("Streams.ListFeaturedStreams response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}
