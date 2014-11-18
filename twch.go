@@ -202,11 +202,15 @@ type Asset struct {
 	Template *string `json:"template"`
 }
 
+type ListOptions struct {
+	Limit  int `url:"limit,omitempty"`
+	Offset int `url:"offset,omitempty"`
+}
+
 // RequestOptions is the base query parameters used for customizing query output from List queries.
 type RequestOptions struct {
-	Limit  int  `url:"limit,omitempty"`
-	Offset int  `url:"offset,omitempty"`
-	HLS    bool `url:"hls,omitempty"`
+	HLS bool `url:"hls,omitempty"`
+	ListOptions
 }
 
 // Response augments http.Response to include extra meta data for List query responses.
@@ -269,4 +273,11 @@ func stringPtr(str string) *string {
 	s := new(string)
 	*s = str
 	return s
+}
+
+// boolPtr converts a boolean value into an allocated pointer to a boolean
+func boolPtr(bo bool) *bool {
+	b := new(bool)
+	*b = bo
+	return b
 }

@@ -49,6 +49,44 @@ func testMethod(t *testing.T, r *http.Request, method string) {
 func testResponse(t *testing.T, r *Response) {
 }
 
+func testListResponse(t *testing.T, r *Response, total *int, next *int, prev *int) {
+	if total != nil {
+		if r.Total == nil {
+			t.Errorf("ListResponse: response total is nil")
+		} else if *r.Total != *total {
+			t.Errorf("ListResponse: response total should not include value: %+v", *r.Total)
+		}
+	} else {
+		if r.Total != total {
+			t.Errorf("ListResponse: response total should not include value: %+v", *r.Total)
+		}
+	}
+
+	if next != nil {
+		if r.NextOffset == nil {
+			t.Errorf("ListResponse: response next is nil")
+		} else if *r.NextOffset != *next {
+			t.Errorf("ListResponse: response next should not include value: %+v", *r.NextOffset)
+		}
+	} else {
+		if r.NextOffset != next {
+			t.Errorf("ListResponse: response next should not include value: %+v", *r.NextOffset)
+		}
+	}
+
+	if prev != nil {
+		if r.PrevOffset == nil {
+			t.Errorf("ListResponse: response prev is nil")
+		} else if *r.PrevOffset != *prev {
+			t.Errorf("ListResponse: response prev should not include value: %+v", *r.PrevOffset)
+		}
+	} else {
+		if r.PrevOffset != prev {
+			t.Errorf("ListResponse: response prev should not include value: %+v", *r.PrevOffset)
+		}
+	}
+}
+
 func assetPtr() *Asset {
 	return &Asset{
 		Large:    stringPtr("l"),

@@ -93,23 +93,12 @@ func TestStreamListStreams(t *testing.T) {
 		},
 	}
 
-	opts := &StreamOptions{Game: "g", Channel: "c", Embeddable: true, RequestOptions: RequestOptions{Limit: 1, Offset: 1, HLS: true}}
+	opts := &StreamOptions{Game: "g", Channel: "c", Embeddable: true, RequestOptions: RequestOptions{ListOptions: ListOptions{Limit: 1, Offset: 1}, HLS: true}}
 	got, resp, err := client.Streams.ListStreams(opts)
 	if err != nil {
 		t.Errorf("Streams.ListStreams returned error: %v", err)
 	}
-
-	if *resp.Total != 1 {
-		t.Errorf("Streams.ListStreams Total did not return correct value: %+v\n", *resp.Total)
-	}
-
-	if *resp.NextOffset != 100 {
-		t.Errorf("Streams.ListStreams NextOffset did not return correct value: %+v\n", *resp.NextOffset)
-	}
-
-	if resp.PrevOffset != nil {
-		t.Errorf("Streams.ListStreams PrevOffset was not nil: %+v\n", *resp.PrevOffset)
-	}
+	testListResponse(t, resp, intPtr(1), intPtr(100), nil)
 
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("Streams.ListStreams response did not match:\nwant: %+v\ngot:  %+v", want, got)
