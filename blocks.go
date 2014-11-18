@@ -40,9 +40,22 @@ func (b *Blocks) ListBlocks(login string, opts *ListOptions) (blocks []Block, re
 	return
 }
 
-func (b *Blocks) BlockUser(target, current string) (Block, error) {
-	// PUT "users/:user/blocks/:target"
-	return Block{}, nil
+// AddBlock adds a block to the passed authenticated user. `user` is the current user,
+// `target` is the account to block. A successful block returns the new block object.
+// This method requires OAuth authentication with the required `user_blocks_edit` scope
+func (b *Blocks) AddBlock(user, target string) (block *Block, resp *Response, err error) {
+	url := fmt.Sprintf("users/%s/blocks/%s", user, target)
+	req, err := b.client.NewRequest("PUT", url)
+	if err != nil {
+		return
+	}
+
+	block = new(Block)
+	resp, err = b.client.Do(req, block)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func (b *Blocks) UnblockUser(target, current string) error {
