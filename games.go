@@ -26,8 +26,13 @@ type gameResult struct {
 }
 
 // Top lists games sorted by number of current viewers on Twitch, most popular first
-func (g *Games) ListTop() (games []Game, resp *Response, err error) {
-	req, err := g.client.NewRequest("GET", "games/top")
+func (g *Games) ListTop(opts *RequestOptions) (games []Game, resp *Response, err error) {
+	url, err := appendOptions("games/top", opts)
+	if err != nil {
+		return
+	}
+
+	req, err := g.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}
