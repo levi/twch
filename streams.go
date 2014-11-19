@@ -73,6 +73,7 @@ func (s *Streams) GetSummary() (summary *StreamSummary, resp *Response, err erro
 	return r, resp, nil
 }
 
+// ListStreams
 func (s *Streams) ListStreams(opts *StreamOptions) (streams []Stream, resp *Response, err error) {
 	u, err := appendOptions("streams", opts)
 	if err != nil {
@@ -114,9 +115,9 @@ func (s *Streams) ListFeaturedStreams(opts *RequestOptions) (f []FeaturedStream,
 	return
 }
 
-// GetChannel fetches the current stream of a given channel.
+// GetStream returns a channel's stream, if live.
 // If the channel is offline, a zeroed Stream is returned without error.
-func (s *Streams) GetChannel(channel string) (stream *Stream, resp *Response, err error) {
+func (s *Streams) GetStream(channel string) (stream *Stream, resp *Response, err error) {
 	uri := fmt.Sprintf("streams/%s", channel)
 	req, err := s.client.NewRequest("GET", uri)
 	if err != nil {

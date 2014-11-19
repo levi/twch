@@ -24,7 +24,7 @@ func TestStreamGetSummary(t *testing.T) {
 	}
 }
 
-func TestStreamGetChannel_Online(t *testing.T) {
+func TestStreamGetStream_Online(t *testing.T) {
 	setup()
 	defer teardown()
 	mux.HandleFunc("/streams/levi", func(w http.ResponseWriter, r *http.Request) {
@@ -39,17 +39,17 @@ func TestStreamGetChannel_Online(t *testing.T) {
 		Channel:   channelPtr(),
 		Preview:   assetPtr(),
 	}
-	got, _, err := client.Streams.GetChannel("levi")
+	got, _, err := client.Streams.GetStream("levi")
 	if err != nil {
-		t.Errorf("Streams.GetChannel returned error: %+v", err)
+		t.Errorf("Streams.GetStream returned error: %+v", err)
 	}
 	if !reflect.DeepEqual(got, want) {
-		fmt.Printf("Streams.GetChannel Channel: %+v\n", *got.Channel)
-		t.Errorf("Streams.GetChannel response was incorrect: \n want: %+v\n got:  %+v", want, got)
+		fmt.Printf("Streams.GetStream Channel: %+v\n", *got.Channel)
+		t.Errorf("Streams.GetStream response was incorrect: \n want: %+v\n got:  %+v", want, got)
 	}
 }
 
-func TestStreamGetChannel_Offline(t *testing.T) {
+func TestStreamGetGetStream_Offline(t *testing.T) {
 	setup()
 	defer teardown()
 	mux.HandleFunc("/streams/levi", func(w http.ResponseWriter, r *http.Request) {
@@ -57,12 +57,12 @@ func TestStreamGetChannel_Offline(t *testing.T) {
 		fmt.Fprint(w, `{ "_links": { "channel": "h", "self": "h" }, "stream": null } }`)
 	})
 	want := new(Stream)
-	got, _, err := client.Streams.GetChannel("levi")
+	got, _, err := client.Streams.GetStream("levi")
 	if err != nil {
-		t.Errorf("Streams.GetChannel returned error: %+v", err)
+		t.Errorf("Streams.GetStream returned error: %+v", err)
 	}
 	if !reflect.DeepEqual(want, got) {
-		t.Errorf("Streams.GetChannel response was incorrect: %+v\n %+v", got, want)
+		t.Errorf("Streams.GetStream response was incorrect: %+v\n %+v", got, want)
 	}
 }
 
