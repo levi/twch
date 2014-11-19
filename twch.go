@@ -283,3 +283,10 @@ func boolPtr(bo bool) *bool {
 	*b = bo
 	return b
 }
+
+// float32Ptr converts a float32 value into an allocated pointer to a float32
+func float32Ptr(f float32) *float32 {
+	fl := new(float32)
+	*fl = f
+	return fl
+}

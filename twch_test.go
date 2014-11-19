@@ -47,6 +47,10 @@ func testMethod(t *testing.T, r *http.Request, method string) {
 }
 
 func testListResponse(t *testing.T, r *Response, total *int, next *int, prev *int) {
+	if r == nil {
+		t.Fatal("ListResponse: response is nil")
+	}
+
 	if total != nil {
 		if r.Total == nil {
 			t.Errorf("ListResponse: response total is nil")
