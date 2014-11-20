@@ -73,7 +73,7 @@ func (s *Streams) GetSummary() (summary *StreamSummary, resp *Response, err erro
 	return r, resp, nil
 }
 
-// ListStreams
+// ListStreams lists all the current streams on Twitch
 func (s *Streams) ListStreams(opts *StreamOptions) (streams []Stream, resp *Response, err error) {
 	u, err := appendOptions("streams", opts)
 	if err != nil {
