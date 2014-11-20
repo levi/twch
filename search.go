@@ -5,25 +5,24 @@ type Search struct {
 }
 
 type searchChannel struct {
-	Channels []Channel   `json:"channels"`
-	Total    int         `json:"_total"`
-	Links    interface{} `json:"_links"`
+	Channels []Channel `json:"channels"`
+	listTotal
+	listLinks
 }
 
 type searchStream struct {
-	Streams []Stream    `json:"streams"`
-	Links   interface{} `json:"_links"`
+	Streams []Stream `json:"streams"`
+	listLinks
 }
 
 type searchGame struct {
-	Games []Game      `json:"games"`
-	Links interface{} `json:"_links"`
+	Games []Game `json:"games"`
+	listLinks
 }
 
 type SearchOptions struct {
-	Query  string `url:"q"`
-	Limit  int    `url:"limit,omitempty"`
-	Offset int    `url:"offset,omitempty"`
+	Query string `url:"q"`
+	ListOptions
 }
 
 type SearchStreamOptions struct {
@@ -37,9 +36,28 @@ type SearchGameOptions struct {
 	SearchOptions
 }
 
-func (s *Search) Channels(q string, opts *SearchOptions) ([]Channel, error) {
+// Channels returns a list of channels matching the search query
+func (s *Search) Channels(q string, opts *SearchOptions) (ch []Channel, resp *Response, err error) {
 	opts.Query = q
-	return nil, nil
+	url, err := appendOptions("search/channels", opts)
+	if err != nil {
+		return
+	}
+
+	req, err := s.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(searchChannel)
+	resp, err = s.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	ch = r.Channels
+
+	return
 }
 
 func (s *Search) Streams(q string, opts *SearchStreamOptions) ([]Stream, error) {
