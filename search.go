@@ -10,8 +10,9 @@ type searchChannel struct {
 	listLinks
 }
 
-type searchStream struct {
+type searchStreams struct {
 	Streams []Stream `json:"streams"`
+	listTotal
 	listLinks
 }
 
@@ -20,26 +21,30 @@ type searchGame struct {
 	listLinks
 }
 
-type SearchOptions struct {
+type searchChannelOptions struct {
 	Query string `url:"q"`
 	ListOptions
 }
 
-type SearchStreamOptions struct {
-	HLS bool `url:"hls,omitempty"`
-	SearchOptions
+type searchStreamOptions struct {
+	Query string `url:"q"`
+	RequestOptions
 }
 
 type SearchGameOptions struct {
 	Type string `url:"url"`
 	Live bool   `url:"live,omitempty"`
-	SearchOptions
+	ListOptions
 }
 
 // Channels returns a list of channels matching the search query
-func (s *Search) Channels(q string, opts *SearchOptions) (ch []Channel, resp *Response, err error) {
-	opts.Query = q
-	url, err := appendOptions("search/channels", opts)
+func (s *Search) Channels(q string, opts *ListOptions) (ch []Channel, resp *Response, err error) {
+	o := &searchChannelOptions{Query: q}
+	if opts != nil {
+		o.ListOptions = *opts
+	}
+
+	url, err := appendOptions("search/channels", o)
 	if err != nil {
 		return
 	}
@@ -60,12 +65,35 @@ func (s *Search) Channels(q string, opts *SearchOptions) (ch []Channel, resp *Re
 	return
 }
 
-func (s *Search) Streams(q string, opts *SearchStreamOptions) ([]Stream, error) {
-	opts.Query = q
-	return nil, nil
+// Streams returns a list of streams matching the search query
+func (s *Search) Streams(q string, opts *RequestOptions) (st []Stream, resp *Response, err error) {
+	o := &searchStreamOptions{Query: q}
+	if opts != nil {
+		o.RequestOptions = *opts
+	}
+
+	url, err := appendOptions("search/streams", o)
+	if err != nil {
+		return
+	}
+
+	req, err := s.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(searchStreams)
+	resp, err = s.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	st = r.Streams
+
+	return
 }
 
-func (s *Search) Games(q string, opts *SearchGameOptions) ([]Game, error) {
-	opts.Query = q
-	return nil, nil
+// Games returns a list of games matching the search query
+func (s *Search) Games(q string, opts *SearchGameOptions) (g []Game, resp *Response, err error) {
+	return nil, nil, nil
 }
