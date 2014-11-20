@@ -37,7 +37,7 @@ func TestListTeams(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Teams.ListTeams: response was wrong: %+v", got)
+		t.Errorf("Teams.ListTeams response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
 
