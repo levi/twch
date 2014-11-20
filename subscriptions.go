@@ -51,11 +51,29 @@ func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *Subscripti
 	return
 }
 
-func (s *Subscriptions) UserSubscribed(user, channel string) (Subscription, error) {
-	// "channels/:channel/subscriptions/:user"
-	return Subscription{}, nil
+// UserSubscribed returns a subscription if the user is subscribed to
+// the given channel. A nil value is returned otherwise.
+// Requires the `channel_check_subscription` authentication scope for
+// the given channel.
+func (s *Subscriptions) GetUserSubscribed(channel, user string) (sub *Subscription, resp *Response, err error) {
+	url := fmt.Sprintf("channels/%s/subscriptions/%s", channel, user)
+	req, err := s.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	sub = new(Subscription)
+	resp, err = s.client.Do(req, sub)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
+// ChannelSubscribed returns a Channel that a user subscribes to. A nil
+// value is returned otherwise.
+// Requires the `user_subscriptions` authentication scope for the given user.
 func (s *Subscriptions) ChannelSubscribed(user, channel string) (Subscription, error) {
 	// "users/:user/subscriptions/:channel"
 	return Subscription{}, nil

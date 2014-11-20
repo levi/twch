@@ -151,3 +151,8 @@ func (c *Channels) StartCommercial(channel string) error {
 	// POST "channels/:channel/commerical"
 	return nil
 }
+
+func (c *Channels) GetChannelFollowers(channel string) ([]Follow, error) {
+	// "channels/:channel/follows"
+	return nil, nil
+}
