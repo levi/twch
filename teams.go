@@ -5,23 +5,41 @@ type Teams struct {
 }
 
 type Team struct {
-	ID          *int    `json:"_id"`
-	Name        *string `json:"name"`
-	Info        *string `json:"info"`
-	DisplayName *string `json:"display_name"`
-	CreatedAt   *string `json:"created_at"`
-	UpdatedAt   *string `json:"updated_at"`
-	Logo        *string `json:"logo"`
-	Banner      *string `json:"banner"`
-	Background  *string `json:"background"`
+	ID          *int    `json:"_id,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Info        *string `json:"info,omitempty"`
+	DisplayName *string `json:"display_name,omitempty"`
+	Logo        *string `json:"logo,omitempty"`
+	Banner      *string `json:"banner,omitempty"`
+	Background  *string `json:"background,omitempty"`
+	CreatedAt   *string `json:"created_at,omitempty"`
+	UpdatedAt   *string `json:"updated_at,omitempty"`
 }
 
-func (t *Teams) ListTeams() ([]Team, error) {
-	// "teams"
-	return nil, nil
+type teamsResponse struct {
+	Teams []Team `json:"teams,omitempty"`
+	*listLinks
 }
 
-func (t *Teams) GetTeam(team string) (Team, error) {
+// ListTeams returns a list of teams that are active on Twitch
+func (t *Teams) ListTeams() (teams []Team, resp *Response, err error) {
+	req, err := t.client.NewRequest("GET", "teams")
+	if err != nil {
+		return
+	}
+
+	r := new(teamsResponse)
+	resp, err = t.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	teams = r.Teams
+
+	return
+}
+
+func (t *Teams) GetTeam(team string) (r Team, resp *Response, err error) {
 	// "teams/:team"
-	return Team{}, nil
+	return Team{}, nil, nil
 }

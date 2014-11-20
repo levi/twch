@@ -12,10 +12,6 @@ type editorsResponse struct {
 	Users []User `json:"users,omitempty"`
 }
 
-type teamsResponse struct {
-	Teams []Team `json:"teams,omitempty"`
-}
-
 type Channel struct {
 	ID                           *int    `json:"_id,omitempty"`
 	DisplayName                  *string `json:"display_name,omitempty"`
