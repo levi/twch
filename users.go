@@ -56,8 +56,26 @@ func (u *Users) GetCurrentUser() (user *User, resp *Response, err error) {
 	return
 }
 
-func (u *Users) ListFollowedStreams(opts *RequestOptions) (s []Stream, rep *Response, err error) {
-	return nil, nil, nil
+// ListFollowedStreams returns a list of the streams the authenticated user follows.
+// Requires the `user_read` authentication scope.
+func (u *Users) ListFollowedStreams(opts *RequestOptions) (s []Stream, resp *Response, err error) {
+	url, err := appendOptions("streams/followed", opts)
+	if err != nil {
+		return
+	}
+
+	req, err := u.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(streamList)
+	resp, err = u.client.Do(req, r)
+	if err != nil {
+		return
+	}
+	s = r.Streams
+	return
 }
 
 func (u *Users) ListFollowedVideos(opts *ListOptions) (s []Video, resp *Response, err error) {

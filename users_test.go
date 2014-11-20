@@ -62,3 +62,40 @@ func TestGetCurrentUser(t *testing.T) {
 		t.Errorf("Users.GetCurrentUser response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestListFollowedStreams(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/streams/followed", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testParams(t, r, params{
+			"limit":  "1",
+			"offset": "1",
+			"hls":    "true",
+		})
+		fmt.Fprint(w, `{ "_total": 1, "streams": [ { "_id": 1, "preview": { "medium": "m", "small": "s", "large": "l", "template": "t" }, "game": "g", "channel": { "mature": null, "background": "b", "updated_at": "2013-02-15T15:22:24Z", "_id": 1, "status": "s", "logo": "l", "teams": [], "url": "u", "display_name": "d", "game": "g", "banner": "b", "name": "n", "delay": 0, "video_banner": null, "_links": { "chat": "c", "subscriptions": "s", "features": "f", "commercial": "c", "stream_key": "s", "editors": "e", "videos": "v", "self": "s", "follows": "f" }, "created_at": "2011-12-23T18:03:44Z" }, "viewers": 1, "created_at": "2014-09-12T02:03:17Z", "_links": { "self": "h" } } ], "_links": { "summary": "h", "followed": "h", "next": "https://api.twitch.tv/kraken/streams?channel=zisss%2Cvoyboy&game=Diablo+III&limit=100&offset=100", "featured": "f", "self": "https://api.twitch.tv/kraken/streams?channel=zisss%2Cvoyboy&game=Diablo+III&limit=100&offset=0" } }`)
+	})
+
+	opts := &RequestOptions{HLS: true, ListOptions: ListOptions{Limit: 1, Offset: 1}}
+	got, resp, err := client.Users.ListFollowedStreams(opts)
+	if err != nil {
+		t.Errorf("Users.ListFollowedStreams: returned error: %v", err)
+	}
+
+	testListResponse(t, resp, intPtr(1), intPtr(100), nil)
+	want := []Stream{
+		Stream{
+			ID:        intPtr(1),
+			Viewers:   intPtr(1),
+			CreatedAt: stringPtr("2014-09-12T02:03:17Z"),
+			Preview:   assetPtr(),
+			Channel:   channelPtr(),
+			Game:      stringPtr("g"),
+		},
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Users.ListFollowedStreams response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}
