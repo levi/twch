@@ -1,5 +1,9 @@
 package twch
 
+import (
+	"fmt"
+)
+
 type Teams struct {
 	client *Client
 }
@@ -39,7 +43,19 @@ func (t *Teams) ListTeams() (teams []Team, resp *Response, err error) {
 	return
 }
 
-func (t *Teams) GetTeam(team string) (r Team, resp *Response, err error) {
-	// "teams/:team"
-	return Team{}, nil, nil
+// GetTeam returns a team for the passed team name
+func (t *Teams) GetTeam(team string) (r *Team, resp *Response, err error) {
+	url := fmt.Sprintf("teams/%s", team)
+	req, err := t.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r = new(Team)
+	resp, err = t.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	return
 }
