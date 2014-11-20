@@ -78,8 +78,29 @@ func (u *Users) ListFollowedStreams(opts *RequestOptions) (s []Stream, resp *Res
 	return
 }
 
-func (u *Users) ListFollowedVideos(opts *ListOptions) (s []Video, resp *Response, err error) {
-	return nil, nil, nil
+// ListFollowedVideos returns a list of videos created by channels the
+// authenticated user is following.
+// Requires the `user_read` authentication scope.
+func (u *Users) ListFollowedVideos(opts *ListOptions) (videos []Video, resp *Response, err error) {
+	url, err := appendOptions("videos/followed", opts)
+	if err != nil {
+		return
+	}
+
+	req, err := u.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(videosResponse)
+	resp, err = u.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	videos = r.Videos
+
+	return
 }
 
 func (u *Users) ListFollowedChannels(user string) (ch []Channel, resp *Response, err error) {

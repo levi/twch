@@ -99,3 +99,46 @@ func TestListFollowedStreams(t *testing.T) {
 		t.Errorf("Users.ListFollowedStreams response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestListFollowedVideos(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/videos/followed", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testParams(t, r, params{
+			"limit":  "1",
+			"offset": "1",
+		})
+		fmt.Fprint(w, `{ "_links": { "next": "https://api.twitch.tv/kraken/videos/top?game=League+of+Legends&limit=10&offset=10&period=month", "self": "https://api.twitch.tv/kraken/videos/top?game=League+of+Legends&limit=10&offset=0&period=month" }, "videos": [ { "recorded_at": "2013-03-13T09:51:31Z", "preview": "p", "description": "d", "url": "u", "title": "t", "channel": { "name": "n", "display_name": "d" }, "length": 1, "game": "g", "views": 1, "_id": "i", "_links": { "channel": "c", "self": "s" } } ] }`)
+	})
+
+	opts := &ListOptions{Limit: 1, Offset: 1}
+	got, resp, err := client.Users.ListFollowedVideos(opts)
+	if err != nil {
+		t.Errorf("Users.ListFollowedVideos: returned error: %v", err)
+	}
+
+	testListResponse(t, resp, nil, intPtr(10), nil)
+	want := []Video{
+		Video{
+			ID:          stringPtr("i"),
+			Preview:     stringPtr("p"),
+			Description: stringPtr("d"),
+			URL:         stringPtr("u"),
+			Title:       stringPtr("t"),
+			Game:        stringPtr("g"),
+			Views:       intPtr(1),
+			Length:      intPtr(1),
+			RecordedAt:  stringPtr("2013-03-13T09:51:31Z"),
+			Channel: &Channel{
+				Name:        stringPtr("n"),
+				DisplayName: stringPtr("d"),
+			},
+		},
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Users.ListFollowedVideos response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}
