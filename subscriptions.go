@@ -15,9 +15,10 @@ type listSubscription struct {
 }
 
 type Subscription struct {
-	ID        *string `json:"_id,omitempty"`
-	User      *User   `json:"user,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
+	ID        *string  `json:"_id,omitempty"`
+	User      *User    `json:"user,omitempty"`
+	Channel   *Channel `json:"channel,omitempty"`
+	CreatedAt *string  `json:"created_at,omitempty"`
 }
 
 type SubscriptionOptions struct {
@@ -52,7 +53,7 @@ func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *Subscripti
 }
 
 // UserSubscribed returns a subscription if the user is subscribed to
-// the given channel. A nil value is returned otherwise.
+// the given channel.
 // Requires the `channel_check_subscription` authentication scope for
 // the given channel.
 func (s *Subscriptions) GetUserSubscribed(channel, user string) (sub *Subscription, resp *Response, err error) {
@@ -71,10 +72,21 @@ func (s *Subscriptions) GetUserSubscribed(channel, user string) (sub *Subscripti
 	return
 }
 
-// ChannelSubscribed returns a Channel that a user subscribes to. A nil
-// value is returned otherwise.
+// ChannelSubscribed returns a subscription with a channel that the user
+// subscribes to.
 // Requires the `user_subscriptions` authentication scope for the given user.
-func (s *Subscriptions) ChannelSubscribed(user, channel string) (Subscription, error) {
-	// "users/:user/subscriptions/:channel"
-	return Subscription{}, nil
+func (s *Subscriptions) GetSubscribedChannel(user, channel string) (sub *Subscription, resp *Response, err error) {
+	url := fmt.Sprintf("users/%s/subscriptions/%s", user, channel)
+	req, err := s.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	sub = new(Subscription)
+	resp, err = s.client.Do(req, sub)
+	if err != nil {
+		return
+	}
+
+	return
 }
