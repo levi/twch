@@ -1,5 +1,9 @@
 package twch
 
+import (
+	"fmt"
+)
+
 type Users struct {
 	client *Client
 }
@@ -19,12 +23,25 @@ type User struct {
 }
 
 // GetCurrentUser returns
-func (u *Users) GetCurrentUser() (User, error) {
-	return User{}, nil
+func (u *Users) GetCurrentUser() (user *User, resp *Response, err error) {
+	return nil, nil, nil
 }
 
-func (u *Users) GetUser(username string) (User, error) {
-	return User{}, nil
+// GetUser returns the public profile of a given Twitch user
+func (u *Users) GetUser(username string) (user *User, resp *Response, err error) {
+	url := fmt.Sprintf("users/%s", username)
+	req, err := u.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	user = new(User)
+	resp, err = u.client.Do(req, user)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func (u *Users) ListFollowedStreams(opts *RequestOptions) (s []Stream, rep *Response, err error) {
