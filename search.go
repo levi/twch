@@ -4,7 +4,7 @@ type Search struct {
 	client *Client
 }
 
-type searchChannel struct {
+type searchChannels struct {
 	Channels []Channel `json:"channels"`
 	listTotal
 	listLinks
@@ -16,9 +16,8 @@ type searchStreams struct {
 	listLinks
 }
 
-type searchGame struct {
+type searchGames struct {
 	Games []Game `json:"games"`
-	listLinks
 }
 
 type searchChannelOptions struct {
@@ -31,10 +30,10 @@ type searchStreamOptions struct {
 	RequestOptions
 }
 
-type SearchGameOptions struct {
-	Type string `url:"url"`
-	Live bool   `url:"live,omitempty"`
-	ListOptions
+type searchGameOptions struct {
+	Type  string `url:"type"`
+	Live  bool   `url:"live,omitempty"`
+	Query string `url:"q"`
 }
 
 // Channels returns a list of channels matching the search query
@@ -54,7 +53,7 @@ func (s *Search) Channels(q string, opts *ListOptions) (ch []Channel, resp *Resp
 		return
 	}
 
-	r := new(searchChannel)
+	r := new(searchChannels)
 	resp, err = s.client.Do(req, r)
 	if err != nil {
 		return
@@ -94,6 +93,29 @@ func (s *Search) Streams(q string, opts *RequestOptions) (st []Stream, resp *Res
 }
 
 // Games returns a list of games matching the search query
-func (s *Search) Games(q string, opts *SearchGameOptions) (g []Game, resp *Response, err error) {
-	return nil, nil, nil
+func (s *Search) Games(q string, live bool) (g []Game, resp *Response, err error) {
+	o := &searchGameOptions{Query: q, Type: "suggest"}
+	if live {
+		o.Live = true
+	}
+
+	url, err := appendOptions("search/games", o)
+	if err != nil {
+		return
+	}
+
+	req, err := s.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(searchGames)
+	resp, err = s.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	g = r.Games
+
+	return
 }

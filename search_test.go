@@ -89,3 +89,38 @@ func TestStreams(t *testing.T) {
 		t.Errorf("Search.Streams response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestGames(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/search/games", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testParams(t, r, params{
+			"q":    "test",
+			"type": "suggest",
+			"live": "true",
+		})
+		fmt.Fprint(w, `{ "games": [ { "box": { "small": "s", "large": "l", "medium": "m", "template": "t" }, "logo": { "small": "s", "large": "l", "medium": "m", "template": "t" }, "popularity": 1, "name": "n", "_id": 1, "giantbomb_id": 1 } ] }`)
+	})
+
+	got, resp, err := client.Search.Games("test", true)
+	if err != nil {
+		t.Errorf("Search.Games: returned error: %v", err)
+	}
+
+	testListResponse(t, resp, nil, nil, nil)
+	want := []Game{
+		Game{
+			Name:        stringPtr("n"),
+			Box:         assetPtr(),
+			Logo:        assetPtr(),
+			GiantbombId: intPtr(1),
+			Popularity:  intPtr(1),
+		},
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Search.Games response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}

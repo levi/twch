@@ -9,6 +9,7 @@ type Game struct {
 	Box         *Asset  `json:"box"`
 	Logo        *Asset  `json:"logo"`
 	GiantbombId *int    `json:"giantbomb_id"`
+	Popularity  *int    `json:"popularity,omitempty"`
 	Viewers     *int
 	Channels    *int
 }
