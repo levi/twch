@@ -1,39 +1,62 @@
 package twch
 
+import (
+	"fmt"
+)
+
 type Subscriptions struct {
 	client *Client
 }
 
 type listSubscription struct {
-  Total int `json:"_total,omitempty"`
-  Links struct {
-    Next string `json:"next"`
-    Self string `json:"self"`
-  } `json:"_links,omitempty"`
-  Subscriptions []Subscription `json:"subscriptions,omitempty"`
+	Subscriptions []Subscription `json:"subscriptions,omitempty"`
+	*listLinks
+	*listTotal
 }
 
 type Subscription struct {
-  Id        int    `json:"_id,omitempty"`
-  User      User   `json:"user,omitempty"`
-  CreatedAt string `json:"created_at,omitempty"`
+	ID        *string `json:"_id,omitempty"`
+	User      *User   `json:"user,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
 }
 
 type SubscriptionOptions struct {
-  Direction string `url:"direction,omitempty"`
+	Direction string `url:"direction,omitempty"`
+	ListOptions
 }
 
-func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *SubscriptionOptions) ([]Subscription, error) {
-  // "channels/:channel/subscriptions"
-  return nil, nil
+// GetChannelSubscriptions returns a list of subscriptions for the given channel,
+// ordered by creation date.
+// Requires the `channel_subscriptions` authentication scope.
+func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *SubscriptionOptions) (sub []Subscription, resp *Response, err error) {
+	url := fmt.Sprintf("channels/%s/subscriptions", channel)
+	url, err = appendOptions(url, opts)
+	if err != nil {
+		return
+	}
+
+	req, err := s.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(listSubscription)
+	resp, err = s.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	sub = r.Subscriptions
+
+	return
 }
 
 func (s *Subscriptions) UserSubscribed(user, channel string) (Subscription, error) {
-  // "channels/:channel/subscriptions/:user"
-  return Subscription{}, nil
+	// "channels/:channel/subscriptions/:user"
+	return Subscription{}, nil
 }
 
 func (s *Subscriptions) ChannelSubscribed(user, channel string) (Subscription, error) {
-  // "users/:user/subscriptions/:channel"
-  return Subscription{}, nil
+	// "users/:user/subscriptions/:channel"
+	return Subscription{}, nil
 }

@@ -23,7 +23,6 @@ type Client struct {
 	Blocks        *Blocks
 	Channels      *Channels
 	Chat          *Chats
-	Follows       *Follows
 	Games         *Games
 	Ingests       *Ingests
 	Search        *Search
@@ -43,7 +42,6 @@ func NewClient(id string) (client *Client, err error) {
 	client.Blocks = &Blocks{client: client}
 	client.Channels = &Channels{client: client}
 	client.Chat = &Chats{client: client}
-	client.Follows = &Follows{client: client}
 	client.Games = &Games{client: client}
 	client.Ingests = &Ingests{client: client}
 	client.Search = &Search{client: client}

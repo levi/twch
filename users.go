@@ -18,10 +18,39 @@ type User struct {
 	Staff       *bool   `json:"staff,omitempty"`
 }
 
-func (u *Users) CurrentUser() (User, error) {
+// GetCurrentUser returns
+func (u *Users) GetCurrentUser() (User, error) {
 	return User{}, nil
 }
 
-func (u *Users) User(username string) (User, error) {
+func (u *Users) GetUser(username string) (User, error) {
 	return User{}, nil
+}
+
+func (u *Users) ListFollowedStreams(opts *RequestOptions) (s []Stream, rep *Response, err error) {
+	return nil, nil, nil
+}
+
+func (u *Users) ListFollowedVideos(opts *ListOptions) (s []Video, resp *Response, err error) {
+	return nil, nil, nil
+}
+
+func (u *Users) ListFollowedChannels(user string) (ch []Channel, resp *Response, err error) {
+	// "users/:user/follows/channels"
+	return nil, nil, nil
+}
+
+func (u *Users) IsFollowing(user, channel string) (ch *Channel, resp *Response, err error) {
+	// "users/:user/follows/channels/:target"
+	return nil, nil, nil
+}
+
+func (u *Users) FollowChannel(user, channel string) (ch *Channel, resp *Response, err error) {
+	// PUT "users/:user/follows/channels/:target"
+	return nil, nil, nil
+}
+
+func (u *Users) UnfollowChannel(user, channel string) (err error) {
+	// DELETE "users/:user/follows/channels/:target"
+	return nil
 }
