@@ -79,3 +79,43 @@ func TestListTop(t *testing.T) {
 		t.Errorf("Videos.ListTop response did not match:\nwant: %+v\ngot:  %+v", want, got)
 	}
 }
+
+func TestListChannelVideos(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/channels/test_channel/videos", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testParams(t, r, params{
+			"limit":      "1",
+			"offset":     "1",
+			"broadcasts": "true",
+		})
+		fmt.Fprint(w, `{ "videos": [ { "title": "t", "recorded_at": "2011-10-02T19:57:06Z", "_id": "i", "_links": { "self": "s", "owner": "o" }, "url": "u", "views": 1, "preview": "p", "length": 1, "game": "g", "description": "d" } ], "_links": { "self": "https://api.twitch.tv/kraken/channels/vanillatv/videos?limit=10&offset=0", "next": "https://api.twitch.tv/kraken/channels/vanillatv/videos?limit=10&offset=10" } }`)
+	})
+
+	opts := &VideoChannelOptions{Broadcasts: true, ListOptions: ListOptions{Limit: 1, Offset: 1}}
+	got, resp, err := client.Videos.ListChannelVideos("test_channel", opts)
+	if err != nil {
+		t.Errorf("Videos.ListChannelVideos returned error - %v", err)
+	}
+
+	testListResponse(t, resp, nil, intPtr(10), nil)
+	want := []Video{
+		Video{
+			ID:          stringPtr("i"),
+			Preview:     stringPtr("p"),
+			Description: stringPtr("d"),
+			URL:         stringPtr("u"),
+			Title:       stringPtr("t"),
+			Game:        stringPtr("g"),
+			Views:       intPtr(1),
+			Length:      intPtr(1),
+			RecordedAt:  stringPtr("2011-10-02T19:57:06Z"),
+		},
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Videos.ListChannelVideos response did not match:\nwant: %+v\ngot:  %+v", want, got)
+	}
+}

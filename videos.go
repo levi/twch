@@ -33,9 +33,8 @@ type VideoRequestOptions struct {
 }
 
 type VideoChannelOptions struct {
-	limit      int
-	offset     int
-	broadcasts bool
+	Broadcasts bool `url:"broadcasts,omitempty"`
+	ListOptions
 }
 
 // GetVideo returns a video object via its ID
@@ -60,7 +59,7 @@ func (v *Videos) GetVideo(id int) (video *Video, resp *Response, err error) {
 // By default, the top videos of the "week" are returned.
 // Videos belonging to a specific game can be returned by passing the name of the game in the
 // `Game` VideoRequestOption value. Otherwise, all games will be included in the result.
-func (v *Videos) ListTop(opts *VideoRequestOptions) (video []Video, resp *Response, err error) {
+func (v *Videos) ListTop(opts *VideoRequestOptions) (videos []Video, resp *Response, err error) {
 	url, err := appendOptions("videos/top", opts)
 	if err != nil {
 		return
@@ -77,12 +76,33 @@ func (v *Videos) ListTop(opts *VideoRequestOptions) (video []Video, resp *Respon
 		return
 	}
 
-	video = r.Videos
+	videos = r.Videos
 
 	return
 }
 
-func (v *Videos) ListChannelVideos(channel string) ([]Video, error) {
-	// "channels/:channel/videos"
-	return nil, nil
+// ListChannelVideos returns videos belonging to the target channel.
+// Only broadcasts will be returned when the `VideoChannelOptions.Broadcasts` field
+// is true. Otherwise only highlights are returned by default.
+func (v *Videos) ListChannelVideos(channel string, opts *VideoChannelOptions) (videos []Video, resp *Response, err error) {
+	url := fmt.Sprintf("channels/%s/videos", channel)
+	url, err = appendOptions(url, opts)
+	if err != nil {
+		return
+	}
+
+	req, err := v.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	r := new(videosResponse)
+	resp, err = v.client.Do(req, r)
+	if err != nil {
+		return
+	}
+
+	videos = r.Videos
+
+	return
 }
