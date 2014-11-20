@@ -22,15 +22,27 @@ type User struct {
 	Staff       *bool   `json:"staff,omitempty"`
 }
 
-// GetCurrentUser returns
-func (u *Users) GetCurrentUser() (user *User, resp *Response, err error) {
-	return nil, nil, nil
-}
-
 // GetUser returns the public profile of a given Twitch user
 func (u *Users) GetUser(username string) (user *User, resp *Response, err error) {
 	url := fmt.Sprintf("users/%s", username)
 	req, err := u.client.NewRequest("GET", url)
+	if err != nil {
+		return
+	}
+
+	user = new(User)
+	resp, err = u.client.Do(req, user)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// GetCurrentUser returns the authenticated user with email and partner info.
+// Requires the `user_read` authentication scope.
+func (u *Users) GetCurrentUser() (user *User, resp *Response, err error) {
+	req, err := u.client.NewRequest("GET", "user")
 	if err != nil {
 		return
 	}
