@@ -26,7 +26,7 @@ func (b *Blocks) ListBlocks(login string, opts *ListOptions) (blocks []Block, re
 		return
 	}
 
-	req, err := b.client.NewRequest("GET", u)
+	req, err := b.client.NewRequest("GET", u, false)
 	if err != nil {
 		return
 	}
@@ -45,7 +45,7 @@ func (b *Blocks) ListBlocks(login string, opts *ListOptions) (blocks []Block, re
 // This method requires OAuth authentication with the required `user_blocks_edit` scope
 func (b *Blocks) AddBlock(user, target string) (block *Block, resp *Response, err error) {
 	url := fmt.Sprintf("users/%s/blocks/%s", user, target)
-	req, err := b.client.NewRequest("PUT", url)
+	req, err := b.client.NewRequest("PUT", url, false)
 	if err != nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (b *Blocks) AddBlock(user, target string) (block *Block, resp *Response, er
 // for the given user.
 func (b *Blocks) RemoveBlock(user, target string) (err error) {
 	url := fmt.Sprintf("users/%s/blocks/%s", user, target)
-	req, err := b.client.NewRequest("DELETE", url)
+	req, err := b.client.NewRequest("DELETE", url, false)
 	if err != nil {
 		return
 	}

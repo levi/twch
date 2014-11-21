@@ -33,7 +33,7 @@ func (g *Games) ListTop(opts *RequestOptions) (games []Game, resp *Response, err
 		return
 	}
 
-	req, err := g.client.NewRequest("GET", url)
+	req, err := g.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}

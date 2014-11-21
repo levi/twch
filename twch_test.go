@@ -143,6 +143,17 @@ func TestNewClient_CustomClient(t *testing.T) {
 	}
 }
 
+func TestNewRequest_OmitID(t *testing.T) {
+	req, err := client.NewRequest("GET", "uri", true)
+	if err != nil {
+		t.Errorf("client.NewRequest returned error: %v", err)
+	}
+	req.ParseForm()
+	if got := req.FormValue("client_id"); got != "" {
+		t.Errorf("client.NewRequest should omit client id. Got: %v", got)
+	}
+}
+
 func TestListTotal(t *testing.T) {
 	l := listTotal{Total: intPtr(1)}
 	if v := l.ListTotal(); *v != 1 {

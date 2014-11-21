@@ -25,7 +25,7 @@ type User struct {
 // GetUser returns the public profile of a given Twitch user
 func (u *Users) GetUser(username string) (user *User, resp *Response, err error) {
 	url := fmt.Sprintf("users/%s", username)
-	req, err := u.client.NewRequest("GET", url)
+	req, err := u.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -42,7 +42,7 @@ func (u *Users) GetUser(username string) (user *User, resp *Response, err error)
 // GetCurrentUser returns the authenticated user with email and partner info.
 // Requires the `user_read` authentication scope.
 func (u *Users) GetCurrentUser() (user *User, resp *Response, err error) {
-	req, err := u.client.NewRequest("GET", "user")
+	req, err := u.client.NewRequest("GET", "user", false)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (u *Users) ListFollowedStreams(opts *RequestOptions) (s []Stream, resp *Res
 		return
 	}
 
-	req, err := u.client.NewRequest("GET", url)
+	req, err := u.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -87,7 +87,7 @@ func (u *Users) ListFollowedVideos(opts *ListOptions) (videos []Video, resp *Res
 		return
 	}
 
-	req, err := u.client.NewRequest("GET", url)
+	req, err := u.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}

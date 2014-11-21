@@ -54,7 +54,7 @@ type CommericalOptions struct {
 // GetChannel returns a channel by name
 func (c *Channels) GetChannel(channel string) (ch *Channel, resp *Response, err error) {
 	url := fmt.Sprintf("channels/%s", channel)
-	req, err := c.client.NewRequest("GET", url)
+	req, err := c.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -71,7 +71,7 @@ func (c *Channels) GetChannel(channel string) (ch *Channel, resp *Response, err 
 // GetUserChannel returns the channel for the authenticated user
 // Requires the `channel_read` authentication scope to be approved
 func (c *Channels) GetUserChannel() (ch *Channel, resp *Response, err error) {
-	req, err := c.client.NewRequest("GET", "channel")
+	req, err := c.client.NewRequest("GET", "channel", false)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (c *Channels) GetUserChannel() (ch *Channel, resp *Response, err error) {
 // This method requires the `channel_read` authentication scope
 func (c *Channels) ListChannelEditors(channel string) (u []User, resp *Response, err error) {
 	url := fmt.Sprintf("channels/%s/editors", channel)
-	req, err := c.client.NewRequest("GET", url)
+	req, err := c.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -109,7 +109,7 @@ func (c *Channels) ListChannelEditors(channel string) (u []User, resp *Response,
 // ListChannelTeams returns a list of teams for the given channel
 func (c *Channels) ListChannelTeams(channel string) (t []Team, resp *Response, err error) {
 	url := fmt.Sprintf("channels/%s/teams", channel)
-	req, err := c.client.NewRequest("GET", url)
+	req, err := c.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -134,7 +134,7 @@ func (c *Channels) UpdateChannel(channel string) error {
 // Requires the `channel_stream` authentication scope
 func (c *Channels) ResetStreamKey(channel string) (err error) {
 	url := fmt.Sprintf("channels/%s/stream_key", channel)
-	req, err := c.client.NewRequest("DELETE", url)
+	req, err := c.client.NewRequest("DELETE", url, false)
 	if err != nil {
 		return
 	}

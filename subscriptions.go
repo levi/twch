@@ -36,7 +36,7 @@ func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *Subscripti
 		return
 	}
 
-	req, err := s.client.NewRequest("GET", url)
+	req, err := s.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -58,7 +58,7 @@ func (s *Subscriptions) GetChannelSubscriptions(channel string, opts *Subscripti
 // the given channel.
 func (s *Subscriptions) GetUserSubscribed(channel, user string) (sub *Subscription, resp *Response, err error) {
 	url := fmt.Sprintf("channels/%s/subscriptions/%s", channel, user)
-	req, err := s.client.NewRequest("GET", url)
+	req, err := s.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,7 @@ func (s *Subscriptions) GetUserSubscribed(channel, user string) (sub *Subscripti
 // Requires the `user_subscriptions` authentication scope for the given user.
 func (s *Subscriptions) GetSubscribedChannel(user, channel string) (sub *Subscription, resp *Response, err error) {
 	url := fmt.Sprintf("users/%s/subscriptions/%s", user, channel)
-	req, err := s.client.NewRequest("GET", url)
+	req, err := s.client.NewRequest("GET", url, false)
 	if err != nil {
 		return
 	}
