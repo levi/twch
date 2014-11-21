@@ -116,6 +116,7 @@ func (s *Streams) ListFeaturedStreams(opts *RequestOptions) (f []FeaturedStream,
 }
 
 // GetStream returns a channel's stream, if live.
+//
 // If the channel is offline, a zeroed Stream is returned without error.
 func (s *Streams) GetStream(channel string) (stream *Stream, resp *Response, err error) {
 	uri := fmt.Sprintf("streams/%s", channel)

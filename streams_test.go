@@ -79,17 +79,33 @@ func TestStreamListStreams(t *testing.T) {
 			"embeddable": "true",
 			"hls":        "true",
 		})
-		fmt.Fprint(w, `{ "_total": 1, "streams": [ { "_id": 1, "preview": { "medium": "m", "small": "s", "large": "l", "template": "t" }, "game": "g", "channel": { "mature": null, "background": "b", "updated_at": "2013-02-15T15:22:24Z", "_id": 1, "status": "s", "logo": "l", "teams": [], "url": "u", "display_name": "d", "game": "g", "banner": "b", "name": "n", "delay": 0, "video_banner": null, "_links": { "chat": "c", "subscriptions": "s", "features": "f", "commercial": "c", "stream_key": "s", "editors": "e", "videos": "v", "self": "s", "follows": "f" }, "created_at": "2011-12-23T18:03:44Z" }, "viewers": 1, "created_at": "2014-09-12T02:03:17Z", "_links": { "self": "h" } } ], "_links": { "summary": "h", "followed": "h", "next": "https://api.twitch.tv/kraken/streams?channel=zisss%2Cvoyboy&game=Diablo+III&limit=100&offset=100", "featured": "f", "self": "https://api.twitch.tv/kraken/streams?channel=zisss%2Cvoyboy&game=Diablo+III&limit=100&offset=0" } }`)
+		fmt.Fprint(w, `{"streams":[{"_id":1,"game":"g","viewers":1,"created_at":"2014-11-21T07:09:54Z","preview":{"small":"s","medium":"m","large":"l","template":"t"},"channel":{"background":null,"banner":null,"display_name":"d","game":"g","logo":"l","mature":false,"status":"s","partner":false,"url":"u","video_banner":null,"_id":1,"name":"n","created_at":"2011-12-23T18:03:44Z","updated_at":"2013-02-15T15:22:24Z","delay":0,"followers":1,"profile_banner":null,"profile_banner_background_color":null,"views":1,"language":"en"}}],"_total":1,"_links":{"self":"https://api.twitch.tv/kraken/streams?game=Diablo+III&limit=25&offset=0","next":"https://api.twitch.tv/kraken/streams?game=Diablo+III&limit=25&offset=25","featured":"https://api.twitch.tv/kraken/streams/featured","summary":"https://api.twitch.tv/kraken/streams/summary","followed":"https://api.twitch.tv/kraken/streams/followed"}}`)
 	})
 
 	want := []Stream{
 		Stream{
 			ID:        intPtr(1),
 			Viewers:   intPtr(1),
-			CreatedAt: stringPtr("2014-09-12T02:03:17Z"),
+			CreatedAt: stringPtr("2014-11-21T07:09:54Z"),
 			Preview:   assetPtr(),
-			Channel:   channelPtr(),
-			Game:      stringPtr("g"),
+			Channel: &Channel{
+				ID:          intPtr(1),
+				DisplayName: stringPtr("d"),
+				Name:        stringPtr("n"),
+				Game:        stringPtr("g"),
+				Delay:       intPtr(0),
+				Status:      stringPtr("s"),
+				Logo:        stringPtr("l"),
+				URL:         stringPtr("u"),
+				Mature:      boolPtr(false),
+				Partner:     boolPtr(false),
+				Followers:   intPtr(1),
+				Views:       intPtr(1),
+				Language:    stringPtr("en"),
+				CreatedAt:   stringPtr("2011-12-23T18:03:44Z"),
+				UpdatedAt:   stringPtr("2013-02-15T15:22:24Z"),
+			},
+			Game: stringPtr("g"),
 		},
 	}
 
@@ -98,7 +114,7 @@ func TestStreamListStreams(t *testing.T) {
 	if err != nil {
 		t.Errorf("Streams.ListStreams returned error: %v", err)
 	}
-	testListResponse(t, resp, intPtr(1), intPtr(100), nil)
+	testListResponse(t, resp, intPtr(1), intPtr(25), nil)
 
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("Streams.ListStreams response did not match:\nwant: %+v\ngot:  %+v", want, got)
