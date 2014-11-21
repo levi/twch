@@ -17,7 +17,7 @@ var (
 func setup() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
-	client, _ = NewClient("test-client-key")
+	client, _ = NewClient("test-client-key", nil)
 	client.BaseUrl, _ = url.Parse(server.URL)
 }
 
@@ -112,6 +112,34 @@ func channelPtr() *Channel {
 		URL:         stringPtr("u"),
 		CreatedAt:   stringPtr("2011-12-23T18:03:44Z"),
 		UpdatedAt:   stringPtr("2013-02-15T15:22:24Z"),
+	}
+}
+
+func TestNewClient(t *testing.T) {
+	id := "test-id"
+	c, err := NewClient(id, nil)
+	if err != nil {
+		t.Errorf("NewClient returned error: %+v", err)
+	}
+
+	if c.ID != id {
+		t.Errorf("NewClient ID is invalid: %v != %s", c.ID, id)
+	}
+
+	if got := c.BaseUrl.String(); got != baseUrl {
+		t.Errorf("NewClient baseUrl is invalid: %v != %v", got, baseUrl)
+	}
+}
+
+func TestNewClient_CustomClient(t *testing.T) {
+	cl := &http.Client{}
+	c, err := NewClient("test", cl)
+	if err != nil {
+		t.Errorf("NewClient returned error: %v", err)
+	}
+
+	if c.client != cl {
+		t.Errorf("NewClient custom client is invalid: %v", c.client)
 	}
 }
 

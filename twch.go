@@ -34,11 +34,10 @@ type Client struct {
 }
 
 // NewClient constructs a new client to interface with the Twitch API
-func NewClient(id string) (client *Client, err error) {
+func NewClient(id string, c *http.Client) (client *Client, err error) {
 	client = new(Client)
 	client.ID = id
-	client.client = http.DefaultClient
-	client.BaseUrl, _ = url.Parse(baseUrl)
+	client.BaseUrl, err = url.Parse(baseUrl)
 	client.Blocks = &Blocks{client: client}
 	client.Channels = &Channels{client: client}
 	client.Chat = &Chats{client: client}
@@ -50,6 +49,13 @@ func NewClient(id string) (client *Client, err error) {
 	client.Teams = &Teams{client: client}
 	client.Users = &Users{client: client}
 	client.Videos = &Videos{client: client}
+
+	if c != nil {
+		client.client = c
+	} else {
+		client.client = http.DefaultClient
+	}
+
 	return client, nil
 }
 
