@@ -40,7 +40,7 @@ type VideoChannelOptions struct {
 // GetVideo returns a video object via its ID
 func (v *Videos) GetVideo(id int) (video *Video, resp *Response, err error) {
 	url := fmt.Sprintf("videos/%d", id)
-	req, err := v.client.NewRequest("GET", url, false)
+	req, err := v.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (v *Videos) ListTop(opts *VideoRequestOptions) (videos []Video, resp *Respo
 		return
 	}
 
-	req, err := v.client.NewRequest("GET", url, false)
+	req, err := v.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (v *Videos) ListChannelVideos(channel string, opts *VideoChannelOptions) (v
 		return
 	}
 
-	req, err := v.client.NewRequest("GET", url, false)
+	req, err := v.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}

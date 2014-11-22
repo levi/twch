@@ -77,29 +77,20 @@ func appendOptions(u string, opts interface{}) (s string, err error) {
 }
 
 // NewRequest constructs a valid http.Request object for Twitch requests
-func (c *Client) NewRequest(method, uri string, omitID bool) (req *http.Request, err error) {
+func (c *Client) NewRequest(method, uri string) (req *http.Request, err error) {
 	apiUri, err := url.Parse(uri)
 	if err != nil {
 		return nil, err
 	}
 
 	reqUrl := c.BaseUrl.ResolveReference(apiUri)
-
-	if omitID != true {
-		q, err := url.ParseQuery(reqUrl.RawQuery)
-		if err != nil {
-			return nil, err
-		}
-		q.Add("client_id", c.ID)
-		reqUrl.RawQuery = q.Encode()
-	}
-
 	req, err = http.NewRequest(method, reqUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
 
 	req.Header.Add("Accept", acceptHeader)
+	req.Header.Add("Client-ID", c.ID)
 
 	return req, nil
 }

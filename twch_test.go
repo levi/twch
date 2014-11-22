@@ -33,7 +33,6 @@ func testParams(t *testing.T, r *http.Request, par params) {
 	for k, v := range par {
 		want.Add(k, v)
 	}
-	want.Add("client_id", client.ID)
 	r.ParseForm()
 	if got := r.Form; !reflect.DeepEqual(got, want) {
 		t.Errorf("testParams: Request params failed to match:\nwant: %+v\ngot:  %+v", want, got)
@@ -143,25 +142,18 @@ func TestNewClient_CustomClient(t *testing.T) {
 	}
 }
 
-func TestNewRequest_OmitID(t *testing.T) {
-	req, err := client.NewRequest("GET", "uri", true)
-	if err != nil {
-		t.Errorf("client.NewRequest returned error: %v", err)
-	}
-	req.ParseForm()
-	if got := req.FormValue("client_id"); got != "" {
-		t.Errorf("client.NewRequest should omit client id. Got: %v", got)
-	}
-}
-
 func TestNewRequest_Header(t *testing.T) {
-	req, err := client.NewRequest("GET", "uri", true)
+	req, err := client.NewRequest("GET", "uri")
 	if err != nil {
 		t.Errorf("client.NewRequest returned error: %v", err)
 	}
 
 	if got := req.Header.Get("Accept"); got != acceptHeader {
-		t.Error("client.NewRequest Accept header was incorrect. Got: %v", got)
+		t.Errorf("client.NewRequest Accept header was incorrect. Got: %v", got)
+	}
+
+	if got := req.Header.Get("Client-ID"); got != client.ID {
+		t.Errorf("client.NewRequest Client-ID header was incorrect. Got: %v", got)
 	}
 }
 

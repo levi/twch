@@ -27,7 +27,7 @@ type teamsResponse struct {
 
 // ListTeams returns a list of teams that are active on Twitch
 func (t *Teams) ListTeams() (teams []Team, resp *Response, err error) {
-	req, err := t.client.NewRequest("GET", "teams", false)
+	req, err := t.client.NewRequest("GET", "teams")
 	if err != nil {
 		return
 	}
@@ -46,7 +46,7 @@ func (t *Teams) ListTeams() (teams []Team, resp *Response, err error) {
 // GetTeam returns a team for the passed team name
 func (t *Teams) GetTeam(team string) (r *Team, resp *Response, err error) {
 	url := fmt.Sprintf("teams/%s", team)
-	req, err := t.client.NewRequest("GET", url, false)
+	req, err := t.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}

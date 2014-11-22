@@ -78,6 +78,7 @@ func TestStreamListStreams(t *testing.T) {
 			"offset":     "1",
 			"embeddable": "true",
 			"hls":        "true",
+			"client_id":  "c",
 		})
 		fmt.Fprint(w, `{"streams":[{"_id":1,"game":"g","viewers":1,"created_at":"2014-11-21T07:09:54Z","preview":{"small":"s","medium":"m","large":"l","template":"t"},"channel":{"background":null,"banner":null,"display_name":"d","game":"g","logo":"l","mature":false,"status":"s","partner":false,"url":"u","video_banner":null,"_id":1,"name":"n","created_at":"2011-12-23T18:03:44Z","updated_at":"2013-02-15T15:22:24Z","delay":0,"followers":1,"profile_banner":null,"profile_banner_background_color":null,"views":1,"language":"en"}}],"_total":1,"_links":{"self":"https://api.twitch.tv/kraken/streams?game=Diablo+III&limit=25&offset=0","next":"https://api.twitch.tv/kraken/streams?game=Diablo+III&limit=25&offset=25","featured":"https://api.twitch.tv/kraken/streams/featured","summary":"https://api.twitch.tv/kraken/streams/summary","followed":"https://api.twitch.tv/kraken/streams/followed"}}`)
 	})
@@ -109,7 +110,7 @@ func TestStreamListStreams(t *testing.T) {
 		},
 	}
 
-	opts := &StreamOptions{Game: "g", Channel: "c", Embeddable: true, RequestOptions: RequestOptions{ListOptions: ListOptions{Limit: 1, Offset: 1}, HLS: true}}
+	opts := &StreamOptions{Game: "g", Channel: "c", Embeddable: true, ClientID: "c", RequestOptions: RequestOptions{ListOptions: ListOptions{Limit: 1, Offset: 1}, HLS: true}}
 	got, resp, err := client.Streams.ListStreams(opts)
 	if err != nil {
 		t.Errorf("Streams.ListStreams returned error: %v", err)

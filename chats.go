@@ -23,7 +23,7 @@ type Emoticon struct {
 
 // ListEmoticons returns a list of all the emoticons on Twitch
 func (c *Chats) ListEmoticons() (e []Emoticon, resp *Response, err error) {
-	req, err := c.client.NewRequest("GET", "chat/emoticons", false)
+	req, err := c.client.NewRequest("GET", "chat/emoticons")
 	if err != nil {
 		return
 	}

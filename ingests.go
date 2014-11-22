@@ -22,7 +22,7 @@ type listIngest struct {
 }
 
 func (i *Ingests) ListIngests() (ingests []Ingest, resp *Response, err error) {
-	req, err := i.client.NewRequest("GET", "ingests", false)
+	req, err := i.client.NewRequest("GET", "ingests")
 	if err != nil {
 		return
 	}

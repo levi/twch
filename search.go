@@ -48,7 +48,7 @@ func (s *Search) Channels(q string, opts *ListOptions) (ch []Channel, resp *Resp
 		return
 	}
 
-	req, err := s.client.NewRequest("GET", url, false)
+	req, err := s.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (s *Search) Streams(q string, opts *RequestOptions) (st []Stream, resp *Res
 		return
 	}
 
-	req, err := s.client.NewRequest("GET", url, false)
+	req, err := s.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}
@@ -104,7 +104,7 @@ func (s *Search) Games(q string, live bool) (g []Game, resp *Response, err error
 		return
 	}
 
-	req, err := s.client.NewRequest("GET", url, false)
+	req, err := s.client.NewRequest("GET", url)
 	if err != nil {
 		return
 	}
