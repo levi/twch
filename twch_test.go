@@ -154,6 +154,17 @@ func TestNewRequest_OmitID(t *testing.T) {
 	}
 }
 
+func TestNewRequest_Header(t *testing.T) {
+	req, err := client.NewRequest("GET", "uri", true)
+	if err != nil {
+		t.Errorf("client.NewRequest returned error: %v", err)
+	}
+
+	if got := req.Header.Get("Accept"); got != acceptHeader {
+		t.Error("client.NewRequest Accept header was incorrect. Got: %v", got)
+	}
+}
+
 func TestListTotal(t *testing.T) {
 	l := listTotal{Total: intPtr(1)}
 	if v := l.ListTotal(); *v != 1 {
